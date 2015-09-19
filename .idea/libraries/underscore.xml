@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="underscore" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/public/javascripts/libs/bower_components/underscore" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/public/javascripts/libs/bower_components/underscore" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

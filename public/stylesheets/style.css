@@ -1,0 +1,89 @@
+body {
+  margin: 0 0;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+img{
+    float: left;
+}
+h1{
+    width: calc(100% - 220px);
+    float: left;
+}
+p{
+    float: left;
+}
+
+.menu {
+  height: 100%;
+  width: calc(25% - 1.2px);
+  float: left;
+
+  border-right: groove 1px #144854;
+}
+
+.bmenu {
+  height: 48px;
+  width: 100%;
+  background-image: url("/images/up.png");
+}
+
+
+.leftCurtain {
+  width: 10%;
+  height: 200vh;
+  float: left;
+}
+
+.leftCurtain img {
+  width: 100%;
+  height: calc(100vh - 50px);
+}
+
+.rightCurtain {
+  width: 10%;
+  height: 200vh;
+  float: right;
+}
+
+.rightCurtain img {
+  width: 100%;
+  height: calc(100vh - 50px);
+}
+
+.plot {
+  background-color: #191919;
+  width: 80%;
+  height: calc(200vh - 50px);
+  border: 1px black;
+  float: left;
+}
+
+.play {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  background-color: white;
+  width: 31.2%;
+  height: 300px;
+  float: left;
+  margin: 1%;
+}
+
+.play img {
+  padding: 10px;
+  height: 280px;
+  width: 200px;
+}
+
+.rightMenu {
+  width: 80%;
+  background-color: #191919;
+  height: 50px;
+  float: left;
+}
+
+label {
+  color: #b5b5b5;
+}

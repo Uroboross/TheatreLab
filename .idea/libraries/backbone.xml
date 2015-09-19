@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="backbone" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/public/javascripts/libs/bower_components/backbone" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/public/javascripts/libs/bower_components/backbone" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

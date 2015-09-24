@@ -54,7 +54,7 @@ p{
   height: calc(100vh - 50px);
 }
 
-.plot {
+#plot {
   background-color: #191919;
   width: 80%;
   height: calc(200vh - 50px);

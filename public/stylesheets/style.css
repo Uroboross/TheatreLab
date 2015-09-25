@@ -196,8 +196,9 @@ button{
 
 
 .right{
+  border-left: 2px dashed black;
   float: right;
-  width: 100px;
+  width: 99px;
   height: 300px;
   background-color: #de0e11;
   box-shadow: 1px 1px 2px 1px #000000;

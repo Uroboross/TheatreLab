@@ -5,8 +5,12 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Play' });
 });
-router.get('/play/first_play', function(req, res, next) {
-    res.send(JSON.stringify({ a: 1, b: "222", c: "hello" }));
+router.get('/play', function(req, res, next) {
+    res.send(JSON.stringify([
+        {name: "Odesseya", author: "Gomer"},
+        {name: "Natalka Poltavka", author: "Kotlyarevskii"},
+        {name: "Imperia Angelov", author: "Veber"}
+    ]));
 });
 
 module.exports = router;

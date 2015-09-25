@@ -1,4 +1,4 @@
-$(document).ready(function() {
+
     window.App = {
         Models: {},
         Views: {},
@@ -17,6 +17,8 @@ $(document).ready(function() {
         tagName: 'div',
         className: 'play',
         initialize: function(){
+            this.model.on('destroy', this.remove, this);
+            this.model.on('change', this.render, this); //!!!!!!!!!!! ВАЖНО и НУЖНО для обновления вида при изменении модели
             console.log("rendering views of plays");
             this.render();
         },
@@ -33,14 +35,18 @@ $(document).ready(function() {
         render: function(){
             this.$el.html( this.templateMin( this.model.toJSON() ) );
             return this;
+        },
+        remove: function  () {
+            this.$el.remove();
         }
     });
 
-    App.Collections.PlayCollaction = Backbone.Collection.extend({
+    App.Collections.PlayCollection = Backbone.Collection.extend({
         model: App.Models.Play,
         initialize: function(){
             console.log("collection initialized");
-        }
+        },
+        url: '/play/collection.json'
     });
 
     App.Views.PlayCollectionView = Backbone.View.extend({
@@ -50,35 +56,33 @@ $(document).ready(function() {
         initialize: function() {
 
             console.log("rendering collection view");
-            this.render();
+            this.collection.on('add', this.addOne, this);
             console.log(this.el);
-        },
 
+        },
+        addOne: function(play) {
+            var playView = new App.Views.PlayView({ model: play });
+            this.$el.append( playView.render().el );
+        },
         render: function() {
-            this.collection.each(function(play) {
-                var playView = new App.Views.PlayView({model: play});
-                this.$el.append(playView.render().el);
-            }, this);
+            this.$el.empty();
+            this.collection.each(this.addOne, this);
             return this;
         }
 
     });
 
-    var collectionOfPlays = new App.Collections.PlayCollaction([
-        {name: "Odesseya", author: "Gomer"},
-        {name: "Natalka Poltavka", author: "Kotlyarevskii"},
-        {name: "Imperia Angelov", author: "Veber"}
-    ]);
+    var collectionOfPlays = new App.Collections.PlayCollection();
+    collectionOfPlays.fetch();
 
     var playCollectionView = new App.Views.PlayCollectionView({collection: collectionOfPlays});
+    playCollectionView.render();
 
     $('#plot').append(playCollectionView.el);
     //хэлпер шаблона
     //window.template = function(id) {
     //    return _.template( $('#' + id).html() );
     //};
-
-});
 
 
 

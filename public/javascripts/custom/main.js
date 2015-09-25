@@ -78,7 +78,7 @@
     var playCollectionView = new App.Views.PlayCollectionView({collection: collectionOfPlays});
     playCollectionView.render();
 
-    $('#plot').append(playCollectionView.el);
+    //$('#plot').append(playCollectionView.el);
     //хэлпер шаблона
     //window.template = function(id) {
     //    return _.template( $('#' + id).html() );

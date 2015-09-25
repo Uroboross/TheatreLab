@@ -8,7 +8,7 @@ block content
     .menu
   .leftCurtain
     img(src="/images/kurtain.jpg")
-  .rightMenu
+  .sortMenu
     label(for="gogol") Search
     input(id="gogol" type="search")
     label(for="1st") Search
@@ -23,27 +23,35 @@ block content
     .play
       img(src="/images/1412317350.jpg")
       h1= title
-      p Добро пожаловать на #{title}
+      p 22/10/15 15:00
+      p Театр: им. Т.Г.Шевченко
+      p Труппа: Аркадия
+      .price
+        p Цена: от 50грн
+      button Купить
     .play
+      img(src="/images/1412317350.jpg" style="padding: 0 10px 0 0;")
+      h1= title
+      p 22/10/15 15:00
+      p Театр: им. Т.Г.Шевченко
+      p Труппа: Аркадия
+      .price
+        p Цена: от 50грн
+      .bottom
+        p(class="date") 22.10.15 19:00
+        img(src="/images/ticket.png")
+    .variant
       img(src="/images/1412317350.jpg")
       h1= title
-      p Welcome to #{title}
-    .play
-      img(src="/images/1412317350.jpg")
-      h1= title
-      p Welcome to #{title}
-    .play
-      img(src="/images/1412317350.jpg")
-      h1= title
-      p Welcome to #{title}
-    .play
-      img(src="/images/1412317350.jpg")
-      h1= title
-      p Welcome to #{title}
-    .play
-      img(src="/images/1412317350.jpg")
-      h1= title
-      p Welcome to #{title}
+      .right
+        p(class="date") 22.10
+        p(class="date") 19:00
+        img(src="/images/ticket.png")
+      p 22/10/15 15:00
+      p Театр: им. Т.Г.Шевченко
+      p Труппа: Аркадия
+      .price
+        p Цена: от 50грн
 
   script(src="/javascripts/libs/bower_components/underscore/underscore.js")
   script(src="/javascripts/libs/bower_components/jquery/dist/jquery.js")

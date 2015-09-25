@@ -30,6 +30,7 @@ img{
 }
 
 .bmenu {
+  position: fixed;
   height: 48px;
   width: 100%;
   background-image: url("/images/up.png");
@@ -37,6 +38,9 @@ img{
 
 
 .leftCurtain {
+  background-color: #000000;
+  margin-top: 48px;
+  position: fixed;
   width: 10%;
   height: 200vh;
   float: left;
@@ -48,6 +52,10 @@ img{
 }
 
 .rightCurtain {
+  background-color: #000000;
+  margin-top: 48px;
+  position: fixed;
+  margin-left: 90%;
   width: 10%;
   height: 200vh;
   float: right;
@@ -57,11 +65,27 @@ img{
   width: 100%;
   height: calc(100vh - 50px);
 }
+/*-----------------------------Сортировки-----------------------------------*/
+.sortMenu {
+  position: fixed;
+  margin-top: 48px;
+  margin-left: 10%;
+  width: 80%;
+  background-color: #191919;
+  height: 50px;
+  float: left;
+}
+
+label {
+  color: #b5b5b5;
+}
 
 
 /*----------------------Представления-----------------------------*/
 #plot {
-  background-color: #191919;
+  margin-top: 98px;
+  margin-left: 10%;
+  background-color: #000000;
   width: 80%;
   height: calc(200vh - 50px);
   border: 1px black;
@@ -190,15 +214,4 @@ button{
   margin-top: 80px;
   height: 80px;
   width: 80px;
-}
-/*-----------------------------Сортировки-----------------------------------*/
-.sortMenu {
-  width: 80%;
-  background-color: #191919;
-  height: 50px;
-  float: left;
-}
-
-label {
-  color: #b5b5b5;
 }

@@ -1,6 +1,6 @@
 @font-face {
-  font-family: 'Crimson Text Roman';
-  src: url("http://webfonts.ru/import/crimsonroman.css");
+  font-family: 'Astemper Bold';
+  src: url("/fonts/astamper_bold.ttf");
 }
 @font-face {
   font-family: "Due Date";
@@ -8,7 +8,7 @@
 }
 
 body {
-  font: 14px 'Crimson Text Roman', serif;
+  font-family: "Astemper Bold", serif;
   margin: 0 0;
 }
 
@@ -95,7 +95,7 @@ label {
 .play {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   background-color: white;
-  width: 31.2%;
+  width: 48%;
   height: 300px;
   float: left;
   margin: 1%;
@@ -106,20 +106,24 @@ label {
   height: 280px;
   width: 200px;
 }
-h1{
-  width: calc(100% - 220px);
+.play h1{
+  width: calc(100% - 330px) ;
   float: left;
 }
-p{
-  width: calc(100% - 220px);
+.play p{
+  font-size: 14pt;
+  margin-top: 0;
+  width: calc(100% - 330px) ;
   float: left;
 }
 
 .price{
-  margin-right: calc(100% - 350px);
+  font-size: 14pt;
+  margin-right: 100px;
   float: left ;
-  width: 130px;
-  height: 40px;
+  width: 190px;
+  height: 30px;
+  padding: 7px 0 0 10px;
   background-color: #ffeda9;
   border-radius: 10px;
 }
@@ -129,83 +133,29 @@ p{
 }
 
 button{
-  font: 100% 'Crimson Text Roman', serif;
-  text-shadow: 1px 1px #860c11;
-  color: white;
-  margin: 10px 10px 10px 0;
-  width: 100px;
-  height: 40px;
-  float:left;
-  background-color: #de0e11;
-  border-style: none;
-  box-shadow: 1px 1px 1px  1px #860c11;
-  border-radius: 10px;
-}
-
-.bottom{
-  float:left;
-  clear: both;
-  width: 100%;
-  height: 50px;
-  background-color: #de0e11;
-  box-shadow: 1px 1px 2px 1px #000000;
-}
-.bottom p{
-  font-family: "Due Date", serif;
-  font-size: 25pt;
-  padding: 0 0 0 10px;
-  margin: 0 0;
-}
-.bottom img{
-  float: right;
-  padding: 5px 10px 5px 0;
-  margin: 0 0;
-  height: 40px;
-  width: 40px;
-}
-
-.variant{
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  background-color: white;
-  width: 31.2%;
-  height: 300px;
-  float: left;
-  margin: 1%;
-}
-
-
-.variant img {
-  padding: 10px;
-  height: 280px;
+  font: 18pt "Astemper Bold", serif;
+  margin-top: 10px;
+  float: left ;
   width: 200px;
-}
-
-.variant p{
-  float: left;
-  width: auto;
-}
-.variant h1{
-  float: left;
-  width: auto;
-}
-
-
-.variant .price{
-  margin-right: 0;
+  height: 40px;
+  padding-top: 7px;
+  background-color: #b1e89a;
+  border-radius: 10px;
+  border-style: none;
 }
 
 
 .right{
   border-left: 2px dashed black;
   float: right;
-  width: 99px;
+  width: 108px;
   height: 300px;
   background-color: #de0e11;
   box-shadow: 1px 1px 2px 1px #000000;
 }
 
 .right p{
-  font-family: "Due Date", serif;
+  width: auto;
   font-size: 25pt;
   padding: 5px;
   margin: 0 0;

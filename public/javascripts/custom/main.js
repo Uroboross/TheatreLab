@@ -35,20 +35,41 @@
          p Труппа: Аркадия
          .price
          p Цена: от 50грн
-         button Подробнее*/
+         button Подробнее
+
+
+         <p>This is the main content. To display a lightbox click <a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='block';document.getElementById('fade').style.display='block'">here</a></p>
+         <div id="light" class="white_content">This is the lightbox content. <a href = "javascript:void(0)" onclick = "document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">Close</a></div>
+         <div id="fade" class="black_overlay"></div> </body>
+
+         */
 
 
         
-        templateMin: _.template('<img src="/images/<%= picture%>"><h1><%= name %></h1><div class="right"><p><%= date %></p><p><%= time %></p><img src="/images/ticket.png"></div><p>Театр: <%= theatre %></p><p>Труппа: <%= troupe %></p><div class="price">Цена: от <%= price %>грн</div><button>Подробнее</button>'),
-        templateMax: _.template('<h1><%= name %></h1><p>(<%= date %>)</p><p>Author: <%= author %></p><button class="less">Hide this. NOW!</button>'),
+        templateMin: _.template('<img src="/images/<%= picture%>"><h1><%= name %></h1><div class="right"><p><%= date %></p><p><%= time %></p><img class="buy" src="/images/ticket.png"></div><p>Театр: <span><%= theatre %></span></p><p>Труппа: <span><%= troupe %></span></p><div class="price"><p>Цена:<span> от <%= price %>грн</span></p></div><button class="more">Подробнее</button>'),
+        templateMax: _.template('<img src="/images/<%= picture%>"><h1><%= name %></h1><div class="right"><p><%= date %></p><p><%= time %></p><img class="buy" src="/images/ticket.png"></div><p>Театр: <span><%= theatre %></span></p><p>Труппа: <span><%= troupe %></span></p><div class="price"><p>Цена:<span> от <%= price %>грн</span></p></div><button class="less">Скрыть</button><div class="add" data-transition="slidedown"><p>Актёры: <span><%= starring %></span></p><p>О чём: <span><%= summary %></span></p></div>'),
         events: {
-            'click .more': 'fullInformation',
-            'click .less': 'render'
+            'click .more': 'briefInformation',
+            'click .less': 'fullInformation',
+            'click .buy': "popUp"
         },
         fullInformation: function () {
-            this.$el.html( this.templateMax( this.model.toJSON() ) );
+            this.$el.html( this.templateMin( this.model.toJSON() ) );
+            //определить справа или слева и выставить соответствующий float
+            this.$el.removeClass("bigPlay");
+            this.$el.addClass("smallPlay");
+
         },
 
+        briefInformation: function () {
+            this.$el.html( this.templateMax( this.model.toJSON() ) );
+            this.$el.removeClass("smallPlay");
+            this.$el.addClass("bigPlay");
+        },
+
+        popUp: function(){
+            console.log("buying");
+        },
         render: function(){
             this.$el.html( this.templateMin( this.model.toJSON() ) );
             return this;

@@ -49,22 +49,26 @@
         templateMin: _.template('<img src="/images/<%= picture%>"><h1><%= name %></h1><div class="right"><p><%= date %></p><p><%= time %></p><img class="buy" src="/images/ticket.png"></div><p>Театр: <span><%= theatre %></span></p><p>Труппа: <span><%= troupe %></span></p><div class="price"><p>Цена:<span> от <%= price %>грн</span></p></div><button class="more">Подробнее</button>'),
         templateMax: _.template('<img src="/images/<%= picture%>"><h1><%= name %></h1><div class="right"><p><%= date %></p><p><%= time %></p><img class="buy" src="/images/ticket.png"></div><p>Театр: <span><%= theatre %></span></p><p>Труппа: <span><%= troupe %></span></p><div class="price"><p>Цена:<span> от <%= price %>грн</span></p></div><button class="less">Скрыть</button><div class="add" data-transition="slidedown"><p>Актёры: <span><%= starring %></span></p><p>О чём: <span><%= summary %></span></p></div>'),
         events: {
-            'click .more': 'briefInformation',
-            'click .less': 'fullInformation',
+            'click .more': 'fullInformation',
+            'click .less': 'briefInformation',
             'click .buy': "popUp"
         },
-        fullInformation: function () {
+        briefInformation: function () {
             this.$el.html( this.templateMin( this.model.toJSON() ) );
             //определить справа или слева и выставить соответствующий float
-            this.$el.removeClass("bigPlay");
-            this.$el.addClass("smallPlay");
+            this.$el.css("height", "300px");
+            this.$(".right").css("height", "300px");
+            if(this.$el.offset().left > 500)
+                this.$el.css("float", "left");
 
         },
 
-        briefInformation: function () {
+        fullInformation: function () {
             this.$el.html( this.templateMax( this.model.toJSON() ) );
-            this.$el.removeClass("smallPlay");
-            this.$el.addClass("bigPlay");
+            if(this.$el.offset().left > 500)
+                this.$el.css("float", "right");
+            this.$el.css("height", "630px");
+            this.$(".right").css("height", "630px");
         },
 
         popUp: function(){

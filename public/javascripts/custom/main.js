@@ -4,16 +4,37 @@
         Views: {},
         Collections: {}
     };
-
-
+    var counter = 0;
+    var flag = true;
+    var resultCol;
+    var resultView;
+    function convertDate(date) {
+        var day = date.slice(8);
+        var month = date.slice(4,7);
+        if(day.charAt(0) === '0')
+            day = day.slice(1);
+        var result = day+month;
+        return result;
+    }
+    function convertVal(val){
+        var changeAr = val.split(" ");
+        var newVal;
+        for(var i = 0; i < changeAr.length; i++)
+        {
+            changeAr[i].charAt(0).toUpperCase();
+            if(i === 0)
+                newVal = changeAr[i];
+            else
+                newVal += " " + changeAr[i];
+        }
+        console.log(newVal);
+    }
     App.Models.Play = Backbone.Model.extend({
         defaults: {
             name: 'play',
             date: "22/10/11"
         }
     });
-
-
     App.Models.Checkout = Backbone.Model.extend({
         validation: {
             email: [{
@@ -86,12 +107,12 @@
             console.log("AV created");
         },
         events: {
-                    'click .place': 'choose',
-                    'click .buy': 'buy',
-                    //some button when you already bought them
-                    'click .reserve': 'reserve',
-                    'click .checkout': 'checkout'
-                },
+            'click .place': 'choose',
+            'click .buy': 'buy',
+            //some button when you already bought them
+            'click .reserve': 'reserve',
+            'click .checkout': 'checkout'
+        },
         cancel: function(){
             console.log("cancelled");
         },
@@ -147,9 +168,9 @@
                     }
                     else{
                         if(j == 8 || j == 20) // проход
-                            {
-                                offsetLeft = 28;
-                            }
+                        {
+                            offsetLeft = 28;
+                        }
                         hall+="<div class=\"place\" id=\""+i+"_"+count+"\" style=\"margin-left:"+offsetLeft+"px; margin-top:"+offsetTop+"px\">"+count+"</div>";
                         offsetLeft = 0;
                     }
@@ -163,9 +184,9 @@
         },
         render: function(){
             var smth = this.makeView();
-            // Load the compiled HTML into the Backbone "el"
             this.$el.html( smth );
             return this;
+
             //var id = "";
             //for(var i=0; i<this.model.reserved.length; i++)
             //{
@@ -178,6 +199,104 @@
             //}
         }
     });
+
+
+    App.Models.Sort = Backbone.Model.extend({
+        defaults: {
+            //array: ["Все", "Театр им. Т.Г. Шевченко", "Дом Актёра", "ХНАТОБ", "Театр им. А.С. Пушкина", "ТЮЗ", "Театр Музкомедии", "Театр кукол", "Мадригал"],
+            //arrayoftypes: ["по возрастанию цены", "по убыванию цены", "по дате", "по популярности"]
+        }
+    });
+    App.Views.SortView = Backbone.View.extend({
+        tagName: 'div',
+        className: 'sorttab',
+        initialize: function(){
+            this.render();
+        },
+        events:{
+            'click #help': 'filter',
+            'click #pisun': 'sort'
+        },
+        templateSort: _.template('<label for="gogol">Поиск</label><input id="gogol" type="search" placeholder="Введите название представления..." style="width: 300px"</input><label for="theatre">Театр</label><select id="theatre"><option value="1">Все</option><option value="2">Театр им. Т.Г. Шевченко</option><option value="3">Дом Актёра</option><option value="4">ХНАТОБ</option><option value="5">Театр им. А.С. Пушкина</option><option value="6">ТЮЗ</option><option value="7">Театр Музкомедии</option><option value="8">Театр кукол</option><option value="9">Мадригал</option></select><label for="dateSort">Дата:</label><input id="dateSort" type="date", min="2015-30-09"</input><label for="sort">Сортировать:</label><select id="sort"><option value="0">Укажите параметр сортировки</option><option value="1">по возрастанию цены</option><option value="2">по убыванию цены</option><option value="3">по дате</option><option value="4">по популярности</option></select><button id="help">Найти</button><button id="pisun">Сортировать</button>'),
+
+        filter: function() {
+            var selectedText = $("#theatre option:selected").text();
+            var val = document.getElementById('gogol').value;
+            convertVal(val);
+            var dateText = convertDate(document.getElementById('dateSort').value);
+            if (val === '' && counter === 0 && selectedText === 'Все' && dateText === '')
+                return;
+            else if (val === '' && counter === 1 && selectedText === 'Все' && dateText === '' ){
+                counter = 0;
+                $('#plot').empty();
+                playCollectionView.render();
+                $('#plot').append(playCollectionView.el);
+            }
+            else
+            {
+                counter = 1;
+                var result;
+                if(val !== '')
+                {
+                    flag = false;
+                    result = collectionOfPlays.where({name: val});
+                    resultCol = new App.Collections.PlayCollection(result);
+                }
+                if(selectedText !== 'Все')
+                {
+                    if(flag === true)
+                        result = collectionOfPlays.where({theatre: selectedText});
+                    else
+                        result = resultCol.where({theatre: selectedText});
+                    flag = false;
+                    resultCol = new App.Collections.PlayCollection(result);
+                }
+                if(dateText !== '')
+                {
+                    if(flag === true)
+                        result = collectionOfPlays.where({date: dateText});
+                    else
+                        result = resultCol.where({date: dateText});
+                    resultCol = new App.Collections.PlayCollection(result);
+                }
+                flag = true;
+                $('#plot').empty();
+                resultView = new App.Views.PlayCollectionView({collection: resultCol});
+                resultView.render();
+                $('#plot').append(resultView.el);
+            }
+        },
+        sort: function() {
+            var selectedItem = $('#sort option:selected').val();
+            if(counter === 0)
+            {
+                if(selectedItem === 1)
+                    collectionOfPlays.pluck('price');
+                else if(selectedItem === 2)
+                    collectionOfPlays.pluck('price');
+                else if(selectedItem === 3)
+                    collectionOfPlays.pluck('date');
+                playCollectionView.render();
+                $('#plot').append(playCollectionView.el);
+            }
+            else
+            {
+                if(selectedItem === 1)
+                    resultCol.pluck('price');
+                else if(selectedItem === 2)
+                    resultCol.pluck('price');
+                else if(selectedItem === 3)
+                    resultCol.pluck('date');
+                resultView.render();
+                $('#plot').append(resultView.el);
+            }
+        },
+        render: function(){
+            this.$el.html(this.templateSort(this.model.toJSON()));
+            return this;
+        }
+    });
+
 
 
 
@@ -239,6 +358,13 @@
         initialize: function(){
             console.log("collection initialized");
         },
+        comparator: function(a){
+            var selectedItem = $('#sort option:selected').val();
+            if(selectedItem === 0)
+                return;
+            else
+                return a.get('price');
+        },
         url: '/play/collection.json'
     });
 
@@ -250,6 +376,7 @@
 
             console.log("rendering collection view");
             this.collection.on('add', this.addOne, this);
+            this.collection.on('change', this.sortThisBitch, this);
             console.log(this.el);
 
         },
@@ -265,12 +392,17 @@
 
     });
 
+    var sort = new App.Models.Sort();
+
+    var sortView = new App.Views.SortView({model: sort});
+
     var collectionOfPlays = new App.Collections.PlayCollection();
     collectionOfPlays.fetch();
 
     var playCollectionView = new App.Views.PlayCollectionView({collection: collectionOfPlays});
     playCollectionView.render();
 
+    $('.sortMenu').append(sortView.el);
     $('#plot').append(playCollectionView.el);
 
 

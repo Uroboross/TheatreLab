@@ -36,9 +36,32 @@ block content
   .rightCurtain
     img(src="/images/rkurtain.jpg")
   #plot
+  //Modal
+  div(class="modal fade", id="myModal", role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" tabindex='-1')
+    div(class="modal-dialog")
+      div(class="modal-content")
+        div(class="modal-header")
+          h4(class="js-title-step")
+        div(class="modal-body")
+        div(class="modal-footer")
+          button(type="button", class="btn btn-default js-btn-step pull-left", id="cancel", data-orientation="cancel", data-dismiss="modal")
+          button(type="button", class="btn btn-warning js-btn-step", data-orientation="previous")
+          button(type="button", class="btn btn-success js-btn-step", data-orientation="next")
+
+  //div(class="modal-content")
+        //div(class="modal-header")
+        //  button(type="button" class="close" data-dismiss="modal") &times;
+        //  h4(class="modal-title") Modal Header
+        //div(class="modal-body")
+        //  p This is a large modal.
+        //div(class="modal-footer")
+          button(type="button" class="btn btn-default" data-dismiss="modal") Close
   script(src="/javascripts/libs/bower_components/underscore/underscore.js")
   script(src="/javascripts/libs/bower_components/jquery/dist/jquery.js")
   script(src="/javascripts/libs/bower_components/backbone/backbone.js")
+  script(src="/javascripts/libs/bower_components/bootstrap/dist/js/bootstrap.js")
+  script(src="/javascripts/libs/bower_components/jquery-bootstrap-modal-steps/src/jquery-bootstrap-modal-steps.js")
+  script(src="/javascripts/libs/bower_components/backbone.validation/src/backbone-validation.js")
   script(src="/javascripts/custom/main.js")
 
 

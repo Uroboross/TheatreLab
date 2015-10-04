@@ -8,6 +8,8 @@
     var flag = true;
     var resultCol;
     var resultView;
+
+
     function convertDate(date) {
         var day = date.slice(8);
         var month = date.slice(4,7);
@@ -38,28 +40,28 @@
     App.Models.Checkout = Backbone.Model.extend({
         validation: {
             email: [{
-                pattern: 'email',
-                msg: "поле 'Email' должен содержать символ '@'"
-            },{
                 required: true,
                 msg: "Поле 'Email' обязательно для заполнения"
+            },{
+                pattern: 'email',
+                msg: "поле 'Email' должно содержать реальный email адрес"
             },{
                 rangeLength: [3, 30],
                 msg: "Поле Email должно иметь не менее 3х и не более 30 символов"
             }],
             account: [{
-                pattern: /[0-9]{16}/,
-                msg: "Поле 'Номер счёта' должно содержать только цифры и содержать 16 символов"
-            },{
                 required: true,
                 msg: "Поле 'Номер счёта' обязательно для заполнения"
+            },{
+                pattern: /[0-9]{16}/,
+                msg: "Поле 'Номер счёта' должно содержать 16 цифр без пробелов"
             }],
             cvv: [{
-                pattern: /[0-9]{3}/,
-                msg: "Поле 'CVV' должно содержать только цифры и содержать 3 символа"
-            },{
                 required: true,
                 msg: "Поле 'CVV' обязательно для заполнения"
+            },{
+                pattern: /[0-9]{3}/,
+                msg: "Поле 'CVV' должно содержать 3 цифры без пробела"
             }]
         },
         defaults: {
@@ -69,31 +71,71 @@
 
 
 
+    _.extend(Backbone.Validation.callbacks, {
+        valid: function (view, attr, selector) {
+            var $el = view.$('[name=' + attr + ']'),
+                $group = $el.closest('.form-group');
+            $group.removeClass('has-error');
+            $group.find('.help-block').html('').addClass('hidden');
+        },
+        invalid: function (view, attr, error, selector) {
+            var $el = view.$('[name=' + attr + ']'),
+                $group = $el.closest('.form-group');
+            $group.addClass('has-error');
+            $group.find('.help-block').html(error).removeClass('hidden');
+        }
+    });
+
+    $.fn.serializeObject = function () {
+        "use strict";
+        var a = {}, b = function (b, c) {
+            var d = a[c.name];
+            "undefined" != typeof d && d !== null ? $.isArray(d) ? d.push(c.value) : a[c.name] = [d, c.value] : a[c.name] = c.value
+        };
+        return $.each(this.serializeArray(), b), a
+    };
+
+
+    //
+
+
     App.Views.CheckoutView = Backbone.View.extend({
-        tagName:'div',
-        className: "row hide",
-        initialize: function() {
-            this.$el.attr('data-step', "2");
-            this.$el.attr('data-title', "Оформление заказа");
-            console.log("CV created");
-            this.setHandlers();
+        events: {
+            'click #signUpButton': function (e) {
+                e.preventDefault();
+                console.log("signup");
+                this.signUp();
+            }
         },
-        setHandlers: function(){
-            //не яботает
-            console.log("set");
-            $("#email").onclick = function(){
-                console.log("event");
-                var email = $('#email').innerHTML;
-                this.model.set('email', email);
-            };
+
+        initialize: function () {
+
+            // This hooks up the validation
+            // See: http://thedersen.com/projects/backbone-validation/#using-form-model-validation/validation-binding
+            Backbone.Validation.bind(this);
         },
-        makeView: function(){
-            return '<div class=\"popUpContent\"><form role="form" class="checkoutForm"><div class="form-group"><label for="email">Email:</label><input type="email" class="form-control col-xs-2" id="email" placeholder="Введите свой email" required></div><div class="form-group"><label for="account">Номер счёта:</label><input type="text" class="form-control" id="account" placeholder="XXXX XXXX XXXX XXXX"><label for="cvv">CVV:</label><input type="text" id="cvv" class="form-control" placeholder="введите последние 3 цифры cvv" ></div><div class="checkbox"><label><input type="checkbox"> Я студент</label></div><button type="submit" class="btn btn-default">Submit</button></form></div>';
+
+        signUp: function () {
+            var data = this.$el.serializeObject();
+
+            this.model.set(data);
+
+            // Check if the model is valid before saving
+            // See: http://thedersen.com/projects/backbone-validation/#methods/isvalid
+            if(this.model.isValid(true)){
+                next();
+                //$("#next").removeAttr('disabled');
+            }
         },
+
+        remove: function() {
+            // Remove the validation binding
+            // See: http://thedersen.com/projects/backbone-validation/#using-form-model-validation/unbinding
+            Backbone.Validation.unbind(this);
+            return Backbone.View.prototype.remove.apply(this, arguments);
+        },
+
         render: function(){
-            var smth = this.makeView();
-            this.$el.html( smth );
-            return this;
         }
     });
 
@@ -101,10 +143,12 @@
     App.Views.AudienceView = Backbone.View.extend({
         tagName:'div',
         className: "row hide",
+        arrOfPlaces: [],
         initialize: function() {
             this.$el.attr('data-step', "1");
             this.$el.attr('data-title', "Выбор мест");
             console.log("AV created");
+            this.arrOfPlaces = [];
         },
         events: {
             'click .place': 'choose',
@@ -130,12 +174,25 @@
             {
                 $("#"+e.target.id).css("backgroundColor","red");
                 var arr = e.target.id.split('_');
-                $(".choosenContainer").append('<p class="chosen_place" id="_'+ e.target.id +'">Ряд: '+ arr[0] +' Место: '+ arr[1] +'</p>')
+                $(".choosenContainer").append('<p class="chosen_place" id="_'+ e.target.id +'">Ряд: '+ arr[0] +' Место: '+ arr[1] +'</p>');
+                this.arrOfPlaces.push(e.target.id);
+                $('.ticketPrice').remove();
+                $(".priceContainer").append('<p class="ticketPrice">Сумма:'+ this.arrOfPlaces.length*this.model.get('price') +'</p>');
+                next();
             }
             else
             {
                 $("#"+e.target.id).css("backgroundColor", "rgb(146, 216, 251)");
                 $('#_'+e.target.id).remove();
+                var i;
+                for(i = 0; i<this.arrOfPlaces.length; i++)
+                    if(this.arrOfPlaces[i] == e.target.id)
+                        break;
+                this.arrOfPlaces.splice(i, 1);
+                if(this.arrOfPlaces.length == 0)
+                    disableNext();
+                $('.ticketPrice').remove();
+                $(".priceContainer").append('<p class="ticketPrice">Сумма:'+ this.arrOfPlaces.length*this.model.get('price') +'</p>');
             }
         },
         makeView: function(){
@@ -179,7 +236,7 @@
                     offsetTop = 0;
 
             }
-            hall += "</div><div class='choosenContainer'></div></div>";
+            hall += "</div><div class='choosenContainer'></div><div class='priceContainer'></div></div>";
             return hall;
         },
         render: function(){
@@ -299,17 +356,6 @@
 
 
 
-
-    //App.Views.SortsView = Backbone.View.extend({
-    //    template: _.template($('.sortMenu').html()),
-    //    render: function() {
-    //        $(this.el).html(this.template(this.model.toJSON()));
-    //        this.setContent();
-    //        return this;
-    //    }
-    //});
-
-
     App.Views.PlayView = Backbone.View.extend({
         tagName: 'div',
         className: 'play',
@@ -324,7 +370,8 @@
         templateMax: _.template('<img src="/images/<%= picture%>"><h1><%= name %></h1><div class="right"><p><%= date %></p><p><%= time %></p><button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-primary"></div><p>Театр: <span><%= theatre %></span></p><p>Труппа: <span><%= troupe %></span></p><div class="price"><p>Цена:<span> от <%= price %>грн</span></p></div><button class="less">Скрыть</button><div class="add"><p>Актёры: <span><%= starring %></span></p><p>О чём: <span><%= summary %></span></p></div>'),
         events: {
             'click .more': 'fullInformation',
-            'click .less': 'briefInformation'
+            'click .less': 'briefInformation',
+            'click .btn-primary': 'buyTicket'
         },
 
         briefInformation: function () {
@@ -343,7 +390,18 @@
             this.$el.css("height", "630px");
             this.$(".right").css("height", "630px");
         },
+        buyTicket: function(){
+            //$('#plot').empty();
+            //$('#myModal').empty();
+            //$('#myModal').append('<div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h4 class="js-title-step"></h4></div><div class="modal-body"><div data-step="2" data-title="Оформление" class="row hide"><div class="checkoutForm"><form role="form" class="form-horizontal"><div class="form-group"><label for="email" class="col-lg-2 control-label">Email</label><div class="col-lg-10"><input id="email" type="email" name="email" placeholder="Введите свой email" class="form-control"><span class="help-block hidden"></span></div></div><div class="form-group"><label for="account" class="col-lg-2 control-label">Номер счёта:</label><div class="col-lg-10"><input id="account" type="text" name="account" placeholder="введите номер счёта (16 цифр)" class="form-control"><span class="help-block hidden"></span></div></div><div class="form-group"><label for="cvv" class="col-lg-2 control-label">CVV</label><div class="col-lg-10"><input id="cvv" type="text" name="cvv" placeholder="введите последние 3 цифры cvv" class="form-control"><span class="help-block hidden"></span></div></div><div class="form-group"><div class="col-lg-offset-2 col-lg-10"><div class="checkbox"><label class="control-label"><input id="terms" type="checkbox" value="true" name="discount">Я студент</label><span class="help-block hidden"></span></div></div></div><div class="form-group"><div class="col-lg-offset-2 col-lg-10"><button id="signUpButton" type="button" class="btn btn-success">Проверить</button></div> </div></form></div></div><div data-step="3" data-title="Завершение оформления заказа" class="row hide"><div class="lastStep"><p>Билеты будут высланы Вам на указанный email адрес в течении получаса.</p><p>При желании Вы можете распечатать билеты прямо сейчас.</p><p>Спасибо за использование нашего сервиса!</p><button id="print" type="button" class="btn btn-success">Распечатать билет</button></div></div></div><div class="modal-footer"><button type="button" id="cancel" data-orientation="cancel" data-dismiss="modal" class="btn btn-default js-btn-step pull-left"></button><button type="button" id="previous" data-orientation="previous" class="btn btn-warning js-btn-step"></button><button type="button" id="next" data-orientation="next" class="btn btn-success js-btn-step"></button></div></div></div>');
 
+            $('.row[data-step=1]').remove();
+            var audienceView = new App.Views.AudienceView({model: this.model});
+            $('.modal-body').append( audienceView.render().$el);
+            var checkoutModel = new App.Models.Checkout();
+            var checkoutView = new App.Views.CheckoutView({el: 'form', model: checkoutModel});
+
+        },
         render: function(){
             this.$el.html( this.templateMin( this.model.toJSON() ) );
             return this;
@@ -376,7 +434,7 @@
 
             console.log("rendering collection view");
             this.collection.on('add', this.addOne, this);
-            this.collection.on('change', this.sortThisBitch, this);
+            //this.collection.on('change', this.sortThisBitch, this);
             console.log(this.el);
 
         },
@@ -406,33 +464,55 @@
     $('#plot').append(playCollectionView.el);
 
 
-    var audienceView = new App.Views.AudienceView();
-    $('.modal-body').append( audienceView.render().$el);
+    //var audienceView = new App.Views.AudienceView();
+    //$('.modal-body').append( audienceView.render().$el);
 
-    var checkoutModel = new App.Models.Checkout();
-    var checkoutView = new App.Views.CheckoutView({model: checkoutModel});
-    $('.modal-body').append(checkoutView.render().$el);
 
-    $('#cancel').on('click', function(){
-        $('.row .hide').remove();
-        $('.modal-body').append( audienceView.render().$el);
-    });
+    //checkoutView.setHandlers();
+
+
+    function disableNext(){
+        $("#next").attr('disabled', 'disabled');
+    }
+    function next(){
+        $("#next").removeAttr('disabled');
+    }
+    function disablePrevious(){
+        $("#previous").attr('disabled', 'disabled');
+    }
+
+
+
+    //$('#cancel').on('click', function(){
+    //    $('.js-title-step').empty();
+    //    $('.row[data-step=1]').remove();
+    //});
     $('#myModal').modalSteps({
         btnCancelHtml: 'Отмена',
         btnPreviousHtml: 'Назад',
         btnNextHtml: 'Далее',
-        btnLastStepHtml: 'Купить',
+        btnLastStepHtml: 'Завершить',
         disableNextButton: false,
         completeCallback: function(){
-            $('.row .hide').remove();
-            $('.modal-body').append( audienceView.render().$el);
+            //$('.row .hide').remove();
+            //$('.modal-body').append( audienceView.render().$el);
         },
         callbacks: {
             '*': function(){
                 console.log("steps");
+            },
+            '1': function(){
+                disableNext();
+            },
+            '2': function(){
+                disableNext();
+            },
+            '3': function(){
+                disablePrevious();
             }
         }
     });
+
 
     //хэлпер шаблона
     //window.template = function(id) {

@@ -226,8 +226,8 @@ span{
 }
 
 .popUpContent{
-  width: 600px;
-  height: 380px;
+  width: 615px;
+  height: 420px;
 }
 
 #placeholder{
@@ -268,19 +268,29 @@ span{
   height: 380px;
 }
 
+.modal-dialog{
+  width: 620px;
+}
+
 .modal-body{
-  height: 400px;
+  width: 615px;
+  height: 440px;
   !important;
 }
 
-.modal-dialog{
+.choosenContainer{
+  width: 169px;
+  overflow: auto;
+  float: right;
+  height: 420px;
 }
 
-.choosenContainer{
-  overflow: auto;
+.priceContainer{
   float: left;
-  height: 380px;
+  width: 422px;
+  height: 40px;
 }
+
 .modal-footer:before{
   float: left;
   !important;
@@ -293,6 +303,11 @@ span{
 /*-----------------------checkout--------------------------------*/
 
 .checkoutForm{
-  margin-left: 150px;
-  width: 300px;
+  /*margin-left: 150px;*/
+  width: 550px;
+}
+
+.lastStep{
+  margin-left: 50px;
+  width: 550px;
 }

@@ -2,14 +2,19 @@
   font-family: 'Astemper Bold';
   src: url("/fonts/astamper_bold.ttf");
 }
-@font-face {
-  font-family: "Due Date";
-  src: url("/fonts/DueDate.ttf");
-}
+/*@font-face {*/
+  /*font-family: "Due Date";*/
+  /*src: url("/fonts/DueDate.ttf");*/
+/*}*/
 
 body {
-  font-family: "Astemper Bold", serif;
+  background-color: black;
   margin: 0 0;
+  -webkit-backface-visibility:hidden;
+}
+
+p, h1, button{
+  color: #000000;
 }
 
 a {
@@ -83,6 +88,7 @@ label {
 
 /*----------------------�������������-----------------------------*/
 #plot {
+  font-family: "Astemper Bold", serif;
   margin-top: 98px;
   margin-left: 10%;
   background-color: #000000;
@@ -146,7 +152,9 @@ label {
   width: 100%;
 }
 
-button{
+
+
+.more, .less{
   font: 14pt "Astemper Bold", serif;
   margin-top: 10px;
   float: left ;
@@ -181,36 +189,110 @@ button{
   width: 80px;
 }
 
+
+.right .btn {
+  margin: 80px 0 0 12px;
+  background-image: url("/images/ticket.png");
+  background-size: cover;
+  background-color: transparent;
+  padding: 40px 40px;
+  border: none;
+  outline:none;
+  !important;
+}
+.right .btn:active{
+  background-color: transparent;
+  outline: none;
+  box-shadow: none;
+  !important;
+}
+
 span{
   font: 14pt "Segoe UI", serif;
 }
 
 /*----------------------------pop-up----------------------------------*/
 
-.black_overlay{
-  display: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: black;
-  z-index:1001;
-  -moz-opacity: 0.8;
-  opacity:.80;
-  filter: alpha(opacity=80);
-}
-.white_content {
-  display: none;
-  position: absolute;
-  top: 25%;
-  left: 25%;
-  width: 50%;
-  height: 50%;
-  padding: 16px;
-  border: 16px solid orange;
-  background-color: white;
-  z-index:1002;
-  overflow: auto;
+.place {
+  text-align: center;
+  cursor: pointer;
+  float: left;
+  margin: 1px;
+  background-color: #92d8fb;
+  width: 13px;
+  height: 13px;
+  border: none;
+  font-size: 10px;
 }
 
+.popUpContent{
+  width: 600px;
+  height: 380px;
+}
+
+#placeholder{
+  float: left;
+  width: 422px;
+  height: 380px;
+}
+
+#stage{
+  background-color: #92d8fb;
+  width: 418px;
+  height: 28px;
+  border: none;
+  font-size: 12pt;
+}
+#stage p{
+  margin: 0 0;
+  padding: 5px;
+  text-align: center;
+}
+
+
+
+.audienceRow{
+  text-align: center;
+  float: left;
+  margin: 1px 1px 0 1px;
+  background-color: #ffeda9;
+  width: 22px;
+  height: 13px;
+  border: none;
+  font-size: 8px;
+}
+
+.rows{
+  float: left;
+  width: 24px;
+  height: 380px;
+}
+
+.modal-body{
+  height: 400px;
+  !important;
+}
+
+.modal-dialog{
+}
+
+.choosenContainer{
+  overflow: auto;
+  float: left;
+  height: 380px;
+}
+.modal-footer:before{
+  float: left;
+  !important;
+}
+
+.chosen_place{
+  font-size: 12pt;
+}
+
+/*-----------------------checkout--------------------------------*/
+
+.checkoutForm{
+  margin-left: 150px;
+  width: 300px;
+}

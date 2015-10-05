@@ -21,14 +21,7 @@
     }
 
 
-    //function convertDate(date) {
-    //    var day = date.slice(8);
-    //    var month = date.slice(4,7);
-    //    if(day.charAt(0) === '0')
-    //        day = day.slice(1);
-    //    var result = day+month;
-    //    return result;
-    //}
+
     function convertVal(val){
         var changeAr = val.split(" ");
         var newVal;
@@ -87,6 +80,7 @@
             var $el = view.$('[name=' + attr + ']'),
                 $group = $el.closest('.form-group');
             $group.removeClass('has-error');
+            $group.addClass('has-success');
             $group.find('.help-block').html('').addClass('hidden');
         },
         invalid: function (view, attr, error, selector) {
@@ -503,12 +497,14 @@
 
     $('.orderType').on('click', function(e){
         if(e.target.value == "book") {
+            disableNext();
             $('.orderType[value=book]').attr("checked","true");
             $("input[name=account]").attr('disabled', 'disabled');
             $("input[name=cvv]").attr('disabled', 'disabled');
         }
         else {
-            $('.orderType[value=book]').attr("checked","false");
+            disableNext();
+            $('.orderType[value=book]').removeAttr("checked");
             $("input[name=account]").removeAttr('disabled');
             $("input[name=cvv]").removeAttr('disabled');
         }

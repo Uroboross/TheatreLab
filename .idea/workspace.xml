@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="428e3c93-7a3e-4a61-918b-580b530cbd08" name="Default" comment="add booking facility&#10;changed sorttab design">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/play/collection.json" afterPath="$PROJECT_DIR$/public/play/collection.json" />
+    <list default="true" id="428e3c93-7a3e-4a61-918b-580b530cbd08" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/index.jade" afterPath="$PROJECT_DIR$/views/index.jade" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/custom/main.js" afterPath="$PROJECT_DIR$/public/javascripts/custom/main.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/style.css" afterPath="$PROJECT_DIR$/public/stylesheets/style.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <list id="cc566114-f608-4dd9-ac52-517003933e86" name="Failed commit: Default" comment="deleted" />
@@ -34,13 +32,13 @@
       <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/javascripts/custom/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-4.5">
-              <caret line="294" column="100" selection-start-line="294" selection-start-column="100" selection-end-line="294" selection-end-column="100" />
+            <state vertical-scroll-proportion="-9.823529">
+              <caret line="506" column="60" selection-start-line="506" selection-start-column="60" selection-end-line="506" selection-end-column="60" />
               <folding>
-                <marker date="1444035886629" expanded="true" signature="10157:10169" placeholder="..." />
-                <marker date="1444035886629" expanded="true" signature="10333:10362" placeholder="..." />
-                <marker date="1444035886629" expanded="true" signature="10837:10866" placeholder="..." />
-                <marker date="1444035886629" expanded="true" signature="11043:11072" placeholder="..." />
+                <marker date="1444037362657" expanded="true" signature="9956:9968" placeholder="..." />
+                <marker date="1444037362657" expanded="true" signature="10132:10161" placeholder="..." />
+                <marker date="1444037362657" expanded="true" signature="10636:10665" placeholder="..." />
+                <marker date="1444037362657" expanded="true" signature="10842:10871" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -49,8 +47,8 @@
       <file leaf-file-name="index.jade" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/views/index.jade">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.375">
-              <caret line="51" column="52" selection-start-line="51" selection-start-column="52" selection-end-line="51" selection-end-column="52" />
+            <state vertical-scroll-proportion="-1.59375">
+              <caret line="3" column="8" selection-start-line="3" selection-start-column="8" selection-end-line="3" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -89,8 +87,8 @@
       <file leaf-file-name="collection.json" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/play/collection.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.52307695">
-              <caret line="18" column="1" selection-start-line="18" selection-start-column="1" selection-end-line="18" selection-end-column="1" />
+            <state vertical-scroll-proportion="0.43589744">
+              <caret line="15" column="188" selection-start-line="15" selection-start-column="188" selection-end-line="15" selection-end-column="188" />
               <folding />
             </state>
           </provider>
@@ -122,10 +120,10 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/app.js" />
-        <option value="$PROJECT_DIR$/views/index.jade" />
         <option value="$PROJECT_DIR$/public/stylesheets/style.css" />
-        <option value="$PROJECT_DIR$/public/javascripts/custom/main.js" />
         <option value="$PROJECT_DIR$/public/play/collection.json" />
+        <option value="$PROJECT_DIR$/views/index.jade" />
+        <option value="$PROJECT_DIR$/public/javascripts/custom/main.js" />
       </list>
     </option>
   </component>
@@ -638,15 +636,21 @@
       <option name="project" value="LOCAL" />
       <updated>1443996490694</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="add booking facility&#10;changed sorttab design">
+      <created>1444036250525</created>
+      <option name="number" value="00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1444036250525</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="136659000" />
+    <option name="totallyTimeSpent" value="138087000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -655,7 +659,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26231387" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26231387" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32760596" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -780,10 +784,10 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="70" column="34" selection-start-line="70" selection-start-column="34" selection-end-line="70" selection-end-column="34" />
           <folding>
-            <marker date="1444035886629" expanded="true" signature="10157:10169" placeholder="..." />
-            <marker date="1444035886629" expanded="true" signature="10333:10362" placeholder="..." />
-            <marker date="1444035886629" expanded="true" signature="10837:10866" placeholder="..." />
-            <marker date="1444035886629" expanded="true" signature="11043:11072" placeholder="..." />
+            <marker date="1444037362657" expanded="true" signature="9956:9968" placeholder="..." />
+            <marker date="1444037362657" expanded="true" signature="10132:10161" placeholder="..." />
+            <marker date="1444037362657" expanded="true" signature="10636:10665" placeholder="..." />
+            <marker date="1444037362657" expanded="true" signature="10842:10871" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -849,10 +853,10 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="70" column="34" selection-start-line="70" selection-start-column="34" selection-end-line="70" selection-end-column="34" />
           <folding>
-            <marker date="1444035886629" expanded="true" signature="10157:10169" placeholder="..." />
-            <marker date="1444035886629" expanded="true" signature="10333:10362" placeholder="..." />
-            <marker date="1444035886629" expanded="true" signature="10837:10866" placeholder="..." />
-            <marker date="1444035886629" expanded="true" signature="11043:11072" placeholder="..." />
+            <marker date="1444037362657" expanded="true" signature="9956:9968" placeholder="..." />
+            <marker date="1444037362657" expanded="true" signature="10132:10161" placeholder="..." />
+            <marker date="1444037362657" expanded="true" signature="10636:10665" placeholder="..." />
+            <marker date="1444037362657" expanded="true" signature="10842:10871" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -878,10 +882,10 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1444035886629" expanded="true" signature="10157:10169" placeholder="..." />
-            <marker date="1444035886629" expanded="true" signature="10333:10362" placeholder="..." />
-            <marker date="1444035886629" expanded="true" signature="10837:10866" placeholder="..." />
-            <marker date="1444035886629" expanded="true" signature="11043:11072" placeholder="..." />
+            <marker date="1444037362657" expanded="true" signature="9956:9968" placeholder="..." />
+            <marker date="1444037362657" expanded="true" signature="10132:10161" placeholder="..." />
+            <marker date="1444037362657" expanded="true" signature="10636:10665" placeholder="..." />
+            <marker date="1444037362657" expanded="true" signature="10842:10871" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -1000,22 +1004,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/javascripts/libs/bower_components/jquery-bootstrap-modal-steps/src/jquery-bootstrap-modal-steps.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="129" column="57" selection-start-line="129" selection-start-column="57" selection-end-line="129" selection-end-column="57" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views/index.jade">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.375">
-          <caret line="51" column="52" selection-start-line="51" selection-start-column="52" selection-end-line="51" selection-end-column="52" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/stylesheets/style.css">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-8.1470585">
@@ -1040,23 +1028,39 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/views/index.jade">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.59375">
+          <caret line="3" column="8" selection-start-line="3" selection-start-column="8" selection-end-line="3" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/public/javascripts/custom/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.5">
-          <caret line="294" column="100" selection-start-line="294" selection-start-column="100" selection-end-line="294" selection-end-column="100" />
+        <state vertical-scroll-proportion="-9.823529">
+          <caret line="506" column="60" selection-start-line="506" selection-start-column="60" selection-end-line="506" selection-end-column="60" />
           <folding>
-            <marker date="1444035886629" expanded="true" signature="10157:10169" placeholder="..." />
-            <marker date="1444035886629" expanded="true" signature="10333:10362" placeholder="..." />
-            <marker date="1444035886629" expanded="true" signature="10837:10866" placeholder="..." />
-            <marker date="1444035886629" expanded="true" signature="11043:11072" placeholder="..." />
+            <marker date="1444037362657" expanded="true" signature="9956:9968" placeholder="..." />
+            <marker date="1444037362657" expanded="true" signature="10132:10161" placeholder="..." />
+            <marker date="1444037362657" expanded="true" signature="10636:10665" placeholder="..." />
+            <marker date="1444037362657" expanded="true" signature="10842:10871" placeholder="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/javascripts/libs/bower_components/jquery-bootstrap-modal-steps/src/jquery-bootstrap-modal-steps.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="129" column="57" selection-start-line="129" selection-start-column="57" selection-end-line="129" selection-end-column="57" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/play/collection.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.52307695">
-          <caret line="18" column="1" selection-start-line="18" selection-start-column="1" selection-end-line="18" selection-end-column="1" />
+        <state vertical-scroll-proportion="0.43589744">
+          <caret line="15" column="188" selection-start-line="15" selection-start-column="188" selection-end-line="15" selection-end-column="188" />
           <folding />
         </state>
       </provider>

@@ -9,15 +9,26 @@
     var resultCol;
     var resultView;
 
-
     function convertDate(date) {
+        if(date.length === 0)
+            return '';
         var day = date.slice(8);
-        var month = date.slice(4,7);
+        var month = date.slice(5,7);
         if(day.charAt(0) === '0')
             day = day.slice(1);
-        var result = day+month;
+        var result = day + '.' + month;
         return result;
     }
+
+
+    //function convertDate(date) {
+    //    var day = date.slice(8);
+    //    var month = date.slice(4,7);
+    //    if(day.charAt(0) === '0')
+    //        day = day.slice(1);
+    //    var result = day+month;
+    //    return result;
+    //}
     function convertVal(val){
         var changeAr = val.split(" ");
         var newVal;
@@ -81,8 +92,16 @@
         invalid: function (view, attr, error, selector) {
             var $el = view.$('[name=' + attr + ']'),
                 $group = $el.closest('.form-group');
-            $group.addClass('has-error');
-            $group.find('.help-block').html(error).removeClass('hidden');
+            console.log();
+            if( ($el.attr('name') == "account" || $el.attr('name') == "cvv") && $('.orderType[value=book]').attr("checked") == "checked")
+            {
+                $group.removeClass('has-error');
+                $group.find('.help-block').html('').addClass('hidden');
+            }
+            else{
+                $group.addClass('has-error');
+                $group.find('.help-block').html(error).removeClass('hidden');
+            }
         }
     });
 
@@ -103,7 +122,6 @@
         events: {
             'click #signUpButton': function (e) {
                 e.preventDefault();
-                console.log("signup");
                 this.signUp();
             }
         },
@@ -122,7 +140,7 @@
 
             // Check if the model is valid before saving
             // See: http://thedersen.com/projects/backbone-validation/#methods/isvalid
-            if(this.model.isValid(true)){
+            if(this.model.isValid(true)||$('.orderType[value=book]').attr("checked") == "checked"){
                 next();
                 //$("#next").removeAttr('disabled');
             }
@@ -274,11 +292,12 @@
             'click #help': 'filter',
             'click #pisun': 'sort'
         },
-        templateSort: _.template('<label for="gogol">Поиск</label><input id="gogol" type="search" placeholder="Введите название представления..." style="width: 300px"</input><label for="theatre">Театр</label><select id="theatre"><option value="1">Все</option><option value="2">Театр им. Т.Г. Шевченко</option><option value="3">Дом Актёра</option><option value="4">ХНАТОБ</option><option value="5">Театр им. А.С. Пушкина</option><option value="6">ТЮЗ</option><option value="7">Театр Музкомедии</option><option value="8">Театр кукол</option><option value="9">Мадригал</option></select><label for="dateSort">Дата:</label><input id="dateSort" type="date", min="2015-30-09"</input><label for="sort">Сортировать:</label><select id="sort"><option value="0">Укажите параметр сортировки</option><option value="1">по возрастанию цены</option><option value="2">по убыванию цены</option><option value="3">по дате</option><option value="4">по популярности</option></select><button id="help">Найти</button><button id="pisun">Сортировать</button>'),
+        templateSort: _.template('<div class="width"><label for="gogol" class="label">Поиск:</label><input id="gogol" class="form-control input-sm" type="search" style="width: 300px" placeholder="Введите название представления..." ></div><label for="theatre" class="label">Театр:</label><select id="theatre" class="form-control input-sm" style="width: 200px; display: inline"><option value="1">Все</option><option value="2">Театр им. Т.Г. Шевченко</option><option value="3">Дом Актёра</option><option value="4">ХНАТОБ</option><option value="5">Театр им. А.С. Пушкина</option><option value="6">ТЮЗ</option><option value="7">Театр Музкомедии</option><option value="8">Театр кукол</option><option value="9">Мадригал</option></select><label for="dateSort" class="label">Дата:</label><input id="dateSort" class="form-control input-sm" type="date" style="display: inline; width: 140px" min="2015-30-09"</input><button id="help" class="btn">Найти</button><label for="sort" class="label">Сортировать:</label><select id="sort" class="input-sm form-control" style="display: inline; width: 225px"><option value="0">Укажите параметр сортировки</option><option value="1">по возрастанию цены</option><option value="2">по убыванию цены</option><option value="3">по дате</option><option value="4">по популярности</option></select><button id="pisun" class="btn">Сортировать</button>'),
 
         filter: function() {
             var selectedText = $("#theatre option:selected").text();
-            var val = document.getElementById('gogol').value;
+            var val = document.getElementById('gogol').value.toUpperCase();
+            //var val = document.getElementById('gogol').value;
             convertVal(val);
             var dateText = convertDate(document.getElementById('dateSort').value);
             if (val === '' && counter === 0 && selectedText === 'Все' && dateText === '')
@@ -482,7 +501,18 @@
     }
 
 
-
+    $('.orderType').on('click', function(e){
+        if(e.target.value == "book") {
+            $('.orderType[value=book]').attr("checked","true");
+            $("input[name=account]").attr('disabled', 'disabled');
+            $("input[name=cvv]").attr('disabled', 'disabled');
+        }
+        else {
+            $('.orderType[value=book]').attr("checked","false");
+            $("input[name=account]").removeAttr('disabled');
+            $("input[name=cvv]").removeAttr('disabled');
+        }
+    });
     //$('#cancel').on('click', function(){
     //    $('.js-title-step').empty();
     //    $('.row[data-step=1]').remove();

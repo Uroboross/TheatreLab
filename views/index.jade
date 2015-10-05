@@ -47,12 +47,22 @@ block content
             div(class="checkoutForm")
               form.form-horizontal(role='form')
                 .form-group
+                  label.col-lg-2.control-label Выберите
+                  .col-lg-10
+                    label.radio-inline.control-label
+                      input#genderMale(type='radio', name='order', class='orderType',  value='buy' checked="true")
+                      |  Купить
+                    label.radio-inline.control-label
+                      input#genderFemale(type='radio', name='order', class='orderType', value='book')
+                      |  Забронировать
+                    span.help-block.hidden
+                .form-group
                   label.col-lg-2.control-label(for='email') Email
                   .col-lg-10
                     input#email.form-control(type='email', name='email', placeholder="Введите свой email" )
                     span.help-block.hidden
                 .form-group
-                  label.col-lg-2.control-label(for='account') Номер счёта:
+                  label.col-lg-2.control-label(for='account') Номер счёта
                   .col-lg-10
                     input#account.form-control(type='text', name='account', placeholder="введите номер счёта (16 цифр)")
                     span.help-block.hidden
@@ -67,6 +77,11 @@ block content
                       label.control-label
                         input#terms(type='checkbox', value='true', name='discount')
                         | Я студент
+                      span.help-block.hidden
+                    .checkbox
+                      label.control-label
+                        input#terms(type='checkbox', value='true', name='discount')
+                        | Я пенсионер
                       span.help-block.hidden
                 .form-group
                   .col-lg-offset-2.col-lg-10

@@ -160,6 +160,7 @@
             this.$el.attr('data-step', "1");
             this.$el.attr('data-title', "Выбор мест");
             console.log("AV created");
+            this.clearFields();
             this.arrOfPlaces = [];
         },
         events: {
@@ -168,6 +169,14 @@
             //some button when you already bought them
             'click .reserve': 'reserve',
             'click .checkout': 'checkout'
+        },
+        clearFields: function(){
+            $('#account').val("").closest('.form-group').removeClass('has-error').removeClass('has-success').find('.help-block').html('').addClass('hidden');
+            $('#email').val("").closest('.form-group').removeClass('has-error').removeClass('has-success').find('.help-block').html('').addClass('hidden');
+            $('#cvv').val("").closest('.form-group').removeClass('has-error').removeClass('has-success').find('.help-block').html('').addClass('hidden');
+            $('#student').removeAttr('checked');
+            $('#renter').removeAttr('checked');
+            $('#buyradio').trigger('click');
         },
         cancel: function(){
             console.log("cancelled");
@@ -186,7 +195,7 @@
             {
                 $("#"+e.target.id).css("backgroundColor","red");
                 var arr = e.target.id.split('_');
-                $(".choosenContainer").append('<p class="chosen_place" id="_'+ e.target.id +'">Ряд: '+ arr[0] +' Место: '+ arr[1] +'</p>');
+                $(".choosenContainer").append('<p class="chosen_row" id="r_'+ e.target.id +'">Ряд: '+ arr[0] +'</p><p class="chosen_place" id="p_'+ e.target.id+'">Место: '+ arr[1] +'</p>');
                 this.arrOfPlaces.push(e.target.id);
                 $('.ticketPrice').remove();
                 $(".priceContainer").append('<p class="ticketPrice">Сумма:'+ this.arrOfPlaces.length*this.model.get('price') +'</p>');
@@ -195,7 +204,8 @@
             else
             {
                 $("#"+e.target.id).css("backgroundColor", "rgb(146, 216, 251)");
-                $('#_'+e.target.id).remove();
+                $('#r_'+e.target.id).remove();
+                $('#p_'+e.target.id).remove();
                 var i;
                 for(i = 0; i<this.arrOfPlaces.length; i++)
                     if(this.arrOfPlaces[i] == e.target.id)
@@ -215,9 +225,9 @@
 
             for(var i = 1; i<=19; i++){
                 if(i == 1)
-                    hall+="<div class=\"audienceRow\" id=\"r"+i+"\" style=\"margin-top: 56px\">р "+i+"</div>";
+                    hall+="<div class=\"audienceRow\" id=\"r"+i+"\" style=\"margin-top: 42px\">р "+i+"</div>";
                 else if(i == 14){
-                    hall+="<div class=\"audienceRow\" id=\"r"+i+"\" style=\"margin-top: 28px\">р "+i+"</div>";
+                    hall+="<div class=\"audienceRow\" id=\"r"+i+"\" style=\"margin-top: 14px\">р "+i+"</div>";
                 }
                 else
                     hall+="<div class=\"audienceRow\" id=\"r"+i+"\">р "+i+"</div>";
@@ -227,7 +237,7 @@
             for(var i = 1; i<=19; i++)
             {
                 if(i == 14 || i == 1)
-                    offsetTop = 28;
+                    offsetTop = 14;
                 for (var j= 1, count=1; j<=lim; j++, count++)
                 {
                     if(i > 14 && j < i-13 || i > 14 && j > lim-(i-14))
@@ -238,7 +248,7 @@
                     else{
                         if(j == 8 || j == 20) // проход
                         {
-                            offsetLeft = 28;
+                            offsetLeft = 14;
                         }
                         hall+="<div class=\"place\" id=\""+i+"_"+count+"\" style=\"margin-left:"+offsetLeft+"px; margin-top:"+offsetTop+"px\">"+count+"</div>";
                         offsetLeft = 0;
@@ -284,10 +294,19 @@
         },
         events:{
             'click #help': 'filter',
-            'click #pisun': 'sort'
+            'click #pisun': 'sort',
+            'click #clear': 'clear'
         },
-        templateSort: _.template('<div class="width"><label for="gogol" class="label">Поиск:</label><input id="gogol" class="form-control input-sm" type="search" style="width: 300px" placeholder="Введите название представления..." ></div><label for="theatre" class="label">Театр:</label><select id="theatre" class="form-control input-sm" style="width: 200px; display: inline"><option value="1">Все</option><option value="2">Театр им. Т.Г. Шевченко</option><option value="3">Дом Актёра</option><option value="4">ХНАТОБ</option><option value="5">Театр им. А.С. Пушкина</option><option value="6">ТЮЗ</option><option value="7">Театр Музкомедии</option><option value="8">Театр кукол</option><option value="9">Мадригал</option></select><label for="dateSort" class="label">Дата:</label><input id="dateSort" class="form-control input-sm" type="date" style="display: inline; width: 140px" min="2015-30-09"</input><button id="help" class="btn">Найти</button><label for="sort" class="label">Сортировать:</label><select id="sort" class="input-sm form-control" style="display: inline; width: 225px"><option value="0">Укажите параметр сортировки</option><option value="1">по возрастанию цены</option><option value="2">по убыванию цены</option><option value="3">по дате</option><option value="4">по популярности</option></select><button id="pisun" class="btn">Сортировать</button>'),
-
+        templateSort: _.template('<div class="width"><label for="gogol" class="label">Поиск:</label><input id="gogol" class="form-control input-sm" type="search" style="width: 300px" placeholder="Введите название представления..." ></div><label for="theatre" class="label">Театр:</label><select id="theatre" class="form-control input-sm" style="width: 200px; display: inline"><option value="1">Все</option><option value="2">Театр им. Т.Г. Шевченко</option><option value="3">Дом Актёра</option><option value="4">ХНАТОБ</option><option value="5">Театр им. А.С. Пушкина</option><option value="6">ТЮЗ</option><option value="7">Театр Музкомедии</option><option value="8">Театр кукол</option><option value="9">Мадригал</option></select><label for="dateSort" class="label">Дата:</label><input id="dateSort" class="form-control input-sm" type="date" style="display: inline; width: 140px" min="2015-30-09"</input><button id="help" class="btn">Найти</button><label for="sort" class="label">Сортировать:</label><select id="sort" class="input-sm form-control" style="display: inline; width: 225px"><option value="0">Укажите параметр сортировки</option><option value="1">по возрастанию цены</option><option value="2">по убыванию цены</option><option value="3">по дате</option><option value="4">по популярности</option></select><button id="pisun" class="btn">Сортировать</button><button id="clear" class="btn">Очистить</button>'),
+        clear: function(){
+            $("#gogol").val("");
+            $("select option[value=1]").attr('selected', 'true');
+            $('#dateSort').val("");
+            counter = 0;
+            $('#plot').empty();
+            playCollectionView.render();
+            $('#plot').append(playCollectionView.el);
+        },
         filter: function() {
             var selectedText = $("#theatre option:selected").text();
             var val = document.getElementById('gogol').value.toUpperCase();
@@ -539,6 +558,18 @@
         }
     });
 
+
+    $("#myModal").keypress(function(e){
+        if(e.keyCode==13){
+            $("#next").trigger('click');
+        }
+    });
+
+    $("#gogol").keypress(function(e){
+        if(e.keyCode==13){
+            $("#help").trigger('click');
+        }
+    });
 
     //хэлпер шаблона
     //window.template = function(id) {

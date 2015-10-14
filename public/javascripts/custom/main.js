@@ -191,43 +191,46 @@
             //add class so that it is marked chosen
         },
         choose: function(e){
-            if($("#"+e.target.id).css("backgroundColor") == "rgb(146, 216, 251)")
+            var placeClass = ($("#"+e.target.id).hasClass('cheap'))? 0:($("#"+e.target.id).hasClass('medium'))? 1:2;
+            if($("#"+e.target.id).css("backgroundColor") == "rgb(255, 0, 0)")
+            {
+                if(placeClass == 0){
+                    $("#"+e.target.id).css("backgroundColor", "rgb(177, 232, 154)");
+                }
+                else if(placeClass == 1) {
+                    $("#"+e.target.id).css("backgroundColor", "rgb(146, 216, 251)");
+                }
+                else {
+                    $("#"+e.target.id).css("backgroundColor", "rgb(255, 237, 169)");
+                }
+                $('#r_'+e.target.id).remove();
+                $('#p_'+e.target.id).remove();
+                this.arrOfPlaces.splice(_.indexOf(this.arrOfPlaces, this.model.get('price')[placeClass]), 1);
+
+                if(this.arrOfPlaces.length == 0)
+                    disableNext();
+                $('.ticketPrice').remove();
+                $(".priceContainer").append('<p class="ticketPrice">Сумма:&nbsp&nbsp&nbsp&nbsp&nbsp'+ _.reduce(this.arrOfPlaces, function(memo, num){ return memo + num; }, 0) +' грн</p>');
+            }
+            else
             {
                 $("#"+e.target.id).css("backgroundColor","red");
                 var arr = e.target.id.split('_');
                 $(".choosenContainer").append('<p class="chosen_row" id="r_'+ e.target.id +'">Ряд: '+ arr[0] +'</p><p class="chosen_place" id="p_'+ e.target.id+'">Место: '+ arr[1] +'</p>');
-                this.arrOfPlaces.push(e.target.id);
+                this.arrOfPlaces.push(this.model.get('price')[placeClass]);
                 $('.ticketPrice').remove();
-                $(".priceContainer").append('<p class="ticketPrice">Сумма:'+ this.arrOfPlaces.length*this.model.get('price') +'</p>');
+                $(".priceContainer").append('<p class="ticketPrice">Сумма:&nbsp&nbsp&nbsp&nbsp&nbsp'+ _.reduce(this.arrOfPlaces, function(memo, num){ return memo + num; }, 0) +' грн</p>');
                 next();
-            }
-            else
-            {
-                $("#"+e.target.id).css("backgroundColor", "rgb(146, 216, 251)");
-                $('#r_'+e.target.id).remove();
-                $('#p_'+e.target.id).remove();
-                var i;
-                for(i = 0; i<this.arrOfPlaces.length; i++)
-                    if(this.arrOfPlaces[i] == e.target.id)
-                        break;
-                this.arrOfPlaces.splice(i, 1);
-                if(this.arrOfPlaces.length == 0)
-                    disableNext();
-                $('.ticketPrice').remove();
-                $(".priceContainer").append('<p class="ticketPrice">Сумма:'+ this.arrOfPlaces.length*this.model.get('price') +'</p>');
             }
         },
         makeView: function(){
-
-
-            //поддержка функции чуз
             var hall = "<div class=\"popUpContent\"><div class='rows'>";
 
             for(var i = 1; i<=19; i++){
                 if(i == 1)
-                    hall+="<div class=\"audienceRow\" id=\"r"+i+"\" style=\"margin-top: 42px\">р "+i+"</div>";
+                    hall+="<div class=\"audienceRow\" id=\"r"+i+"\" style=\"margin-top: 56px\">р "+i+"</div>";
                 else if(i == 14){
-                    hall+="<div class=\"audienceRow\" id=\"r"+i+"\" style=\"margin-top: 14px\">р "+i+"</div>";
+                    hall+="<div class=\"audienceRow\" id=\"r"+i+"\" style=\"margin-top: 28px\">р "+i+"</div>";
                 }
                 else
                     hall+="<div class=\"audienceRow\" id=\"r"+i+"\">р "+i+"</div>";
@@ -236,8 +239,8 @@
             var offsetLeft = 0, offsetTop = 0, lim = 26;
             for(var i = 1; i<=19; i++)
             {
-                if(i == 14 || i == 1)
-                    offsetTop = 14;
+                if(i == 14 || i == 1)//проходы
+                    offsetTop = 28;
                 for (var j= 1, count=1; j<=lim; j++, count++)
                 {
                     if(i > 14 && j < i-13 || i > 14 && j > lim-(i-14))
@@ -250,7 +253,12 @@
                         {
                             offsetLeft = 14;
                         }
-                        hall+="<div class=\"place\" id=\""+i+"_"+count+"\" style=\"margin-left:"+offsetLeft+"px; margin-top:"+offsetTop+"px\">"+count+"</div>";
+                        if(i<6)
+                            hall+="<div class=\"place expensive\" id=\""+i+"_"+count+"\" style=\"margin-left:"+offsetLeft+"px; margin-top:"+offsetTop+"px\">"+count+"</div>";
+                        else if(i>5 && i<14)
+                            hall+="<div class=\"place medium\" id=\""+i+"_"+count+"\" style=\"margin-left:"+offsetLeft+"px; margin-top:"+offsetTop+"px\">"+count+"</div>";
+                        else
+                            hall+="<div class=\"place cheap\" id=\""+i+"_"+count+"\" style=\"margin-left:"+offsetLeft+"px; margin-top:"+offsetTop+"px\">"+count+"</div>";
                         offsetLeft = 0;
                     }
                 }
@@ -258,7 +266,7 @@
                     offsetTop = 0;
 
             }
-            hall += "</div><div class='choosenContainer'></div><div class='priceContainer'></div></div>";
+            hall += "</div><div class='choosenContainer'></div><div class='legend'><div class=\"expensive\"></div><p class='expensivePrice'>"+this.model.get('price')[2]+" грн</p><div class=\" medium\"></div><p class='mediumPrice'>"+this.model.get('price')[1]+" грн</p><div class=\"cheap\"></div><p class='cheapPrice'>"+this.model.get('price')[0]+" грн</p></div><div class='priceContainer'></div></div>";
             return hall;
         },
         render: function(){
@@ -397,15 +405,22 @@
             console.log("rendering views of plays");
             this.render();
         },
+
+        /*<a onmouseover="nhpup.popup('Lorem ipsum dolor sit ...');" href='somewhere.html'>some text</a>
+        */
         /*<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Large Modal</button>*/
         templateMin: _.template('<img src="/images/<%= picture%>"><h1><%= name %></h1><div class="right"><p><%= date %></p><p><%= time %></p><button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-primary"></div><p>Театр: <span><%= theatre %></span></p><p>Труппа: <span><%= troupe %></span></p><div class="price"><p>Цена:<span> от <%= price %>грн</span></p></div><button class="more">Подробнее</button>'),
         templateMax: _.template('<img src="/images/<%= picture%>"><h1><%= name %></h1><div class="right"><p><%= date %></p><p><%= time %></p><button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-primary"></div><p>Театр: <span><%= theatre %></span></p><p>Труппа: <span><%= troupe %></span></p><div class="price"><p>Цена:<span> от <%= price %>грн</span></p></div><button class="less">Скрыть</button><div class="add"><p>Актёры: <span><%= starring %></span></p><p>О чём: <span><%= summary %></span></p></div>'),
         events: {
             'click .more': 'fullInformation',
             'click .less': 'briefInformation',
-            'click .btn-primary': 'buyTicket'
+            'click .btn-primary': 'buyTicket',
+            'mouseover .btn-primary': 'prompt'
         },
 
+        prompt: function(){
+            nhpup.popup('Купить',{'width': 60});
+        },
         briefInformation: function () {
             this.$el.html( this.templateMin( this.model.toJSON() ) );
             this.$el.css("height", "300px");
@@ -570,6 +585,9 @@
             $("#help").trigger('click');
         }
     });
+
+
+
 
     //хэлпер шаблона
     //window.template = function(id) {

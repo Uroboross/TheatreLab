@@ -240,19 +240,6 @@ span{
 
 
 /*----------------------------pop-up----------------------------------*/
-
-.place {
-  text-align: center;
-  cursor: pointer;
-  float: left;
-  margin: 1px;
-  background-color: #92d8fb;
-  width: 13px;
-  height: 13px;
-  border: none;
-  font-size: 10px;
-}
-
 .popUpContent{
   margin: 0 15px 0 15px;
   width: 588px;
@@ -262,11 +249,25 @@ span{
 #placeholder{
   float: left;
   width: 392px;
-  height: 380px;
+  height: 368px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.place {
+  text-align: center;
+  cursor: pointer;
+  float: left;
+  margin: 1px;
+  width: 13px;
+  height: 13px;
+  border: none;
+  font-size: 10px;
 }
 
 #stage{
-  background-color: #92d8fb;
+  background-color: #e6cfa7;
   width: 390px;
   height: 28px;
   border: none;
@@ -284,7 +285,7 @@ span{
   text-align: center;
   float: left;
   margin: 1px 1px 0 1px;
-  background-color: #ffeda9;
+  background-color: #e6cfa7;
   width: 22px;
   height: 13px;
   border: none;
@@ -294,7 +295,7 @@ span{
 .rows{
   float: left;
   width: 24px;
-  height: 380px;
+  height: 368px;
 }
 
 .modal-dialog{
@@ -309,16 +310,54 @@ span{
 
 .choosenContainer{
   width: 171px;
-  padding-left: 15px;
+  padding-left: 14px;
+  border-bottom: 1px solid #e5e5e5;
   overflow: auto;
   float: right;
-  height: 410px;
+  height: 368px;
 }
 
+.legend{
+  padding-left: 83px;
+  float: left;
+  height: 40px;
+  width: 416px;
+}
+
+.legend p{
+  margin: 6px 6px 6px 0;
+  float: left;
+  width: 50px;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.legend div{
+  float: left;
+  width: 13px;
+  height: 13px;
+  border: none;
+  margin: 10px;
+}
+
+.cheap{
+  background-color: #B1E89A;
+}
+
+.medium{
+  background-color: #92d8fb;
+}
+.expensive{
+  background-color: #ffeda9;
+}
+
+
+
 .priceContainer{
+  border-top: 2px solid #e5e5e5;
+  padding: 15px;
   float: left;
   width: 171px;
-  height: 40px;
+  height: 38px;
 }
 
 .modal-footer:before{
@@ -347,4 +386,19 @@ span{
 .lastStep{
   margin-left: 50px;
   width: 550px;
+}
+
+#pup {
+  font-family: "Astemper Bold", serif;
+  position:absolute;
+  z-index: 200;
+  padding: 5px;
+  margin-left: 10px;
+  margin-top: 5px;
+  width: 250px;
+  border-radius: 10px;
+  border-style: none;
+  background-color: #B1E89A;
+  color: black;
+  font-size: 0.95em;
 }

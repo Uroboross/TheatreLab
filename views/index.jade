@@ -16,7 +16,7 @@ block content
           h4(class="js-title-step")
         div(class="modal-body")
           div(class="row hide" data-step="2" data-title="Оформление")
-            div(class="checkoutForm")
+            div(class="checkoutForm" id="controlDiv")
               form.form-horizontal(role='form')
                 .form-group
                   label.col-lg-2.control-label Выберите
@@ -57,7 +57,8 @@ block content
                       span.help-block.hidden
                 .form-group
                   .col-lg-offset-2.col-lg-10
-                    button#signUpButton.btn.btn-success(type='button') Проверить
+                    button(type='button', hidden="hidden" id="checkIfNext")
+
           div(class="row hide" data-step="3" data-title="Завершение оформления заказа")
             div(class="lastStep")
               p Билеты будут высланы Вам на указанный email адрес в течении получаса.

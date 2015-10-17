@@ -4,43 +4,15 @@
         Views: {},
         Collections: {}
     };
-    var counter = 0;
-    var flag = true;
-    var resultCol;
-    var resultView;
 
-    function convertDate(date) {
-        if(date.length === 0)
-            return '';
-        var day = date.slice(8);
-        var month = date.slice(5,7);
-        if(day.charAt(0) === '0')
-            day = day.slice(1);
-        var result = day + '.' + month;
-        return result;
-    }
-
-
-
-    function convertVal(val){
-        var changeAr = val.split(" ");
-        var newVal;
-        for(var i = 0; i < changeAr.length; i++)
-        {
-            changeAr[i].charAt(0).toUpperCase();
-            if(i === 0)
-                newVal = changeAr[i];
-            else
-                newVal += " " + changeAr[i];
-        }
-        console.log(newVal);
-    }
     App.Models.Play = Backbone.Model.extend({
         defaults: {
             name: 'play',
             date: "22/10/11"
         }
     });
+
+    //model to validate
     App.Models.Checkout = Backbone.Model.extend({
         validation: {
             email: [{
@@ -73,8 +45,7 @@
         }
     });
 
-
-
+    //some extension of validation callbacks
     _.extend(Backbone.Validation.callbacks, {
         valid: function (view, attr, selector) {
             var $el = view.$('[name=' + attr + ']'),
@@ -86,7 +57,6 @@
         invalid: function (view, attr, error, selector) {
             var $el = view.$('[name=' + attr + ']'),
                 $group = $el.closest('.form-group');
-            console.log();
             if( ($el.attr('name') == "account" || $el.attr('name') == "cvv") && $('.orderType[value=book]').attr("checked") == "checked")
             {
                 $group.removeClass('has-error');
@@ -109,35 +79,64 @@
     };
 
 
-    //
 
-
+    //this is the main view for the current task
     App.Views.CheckoutView = Backbone.View.extend({
         events: {
-            'click #signUpButton': function (e) {
-                e.preventDefault();
+            'blur #email': 'emailIsValid',
+            'blur #account': 'accountIsValid',
+            'blur #cvv': 'cvvIsValid',
+            'click #checkIfNext': function(){
                 this.signUp();
+                //$('#next').trigger('click');
+            },
+            'click .orderType[value=book]': function(){
+                $('#account').val("").closest('.form-group').removeClass('has-error').removeClass('has-success').find('.help-block').html('').addClass('hidden');
+                $('#cvv').val("").closest('.form-group').removeClass('has-error').removeClass('has-success').find('.help-block').html('').addClass('hidden');
+                this.valid[1] = true;
+                this.valid[2] = true;
+                this.signUp();
+            },
+            'click .orderType[value=buy]': function(){
+                this.cvvIsValid();
+                this.accountIsValid();
             }
         },
-
+        valid: [false, false, false],
+        emailIsValid: function(){
+            $('#checkIfNext').trigger('click');
+            var data = this.$el.serializeObject();
+            this.model.set(data);
+            var isValid = this.model.isValid('email');
+            this.valid[0] = (isValid)?true:false;
+            console.log(this.valid);
+            this.signUp();
+        },
+        accountIsValid: function(){
+            var data = this.$el.serializeObject();
+            this.model.set(data);
+            var isValid = this.model.isValid('account');
+            this.valid[1] = (isValid)?true:false;
+            console.log(this.valid);
+            this.signUp();
+        },
+        cvvIsValid: function(){
+            var data = this.$el.serializeObject();
+            this.model.set(data);
+            var isValid = this.model.isValid('cvv');
+            this.valid[2] = (isValid)?true:false;
+            console.log(this.valid);
+            this.signUp();
+        },
         initialize: function () {
-
             // This hooks up the validation
             // See: http://thedersen.com/projects/backbone-validation/#using-form-model-validation/validation-binding
             Backbone.Validation.bind(this);
         },
 
         signUp: function () {
-            var data = this.$el.serializeObject();
-
-            this.model.set(data);
-
-            // Check if the model is valid before saving
-            // See: http://thedersen.com/projects/backbone-validation/#methods/isvalid
-            if(this.model.isValid(true)||$('.orderType[value=book]').attr("checked") == "checked"){
-                next();
-                //$("#next").removeAttr('disabled');
-            }
+            if(this.valid[0]&&this.valid[1]&&this.valid[2])
+                formValidation = true;
         },
 
         remove: function() {
@@ -164,31 +163,17 @@
             this.arrOfPlaces = [];
         },
         events: {
-            'click .place': 'choose',
-            'click .buy': 'buy',
-            //some button when you already bought them
-            'click .reserve': 'reserve',
-            'click .checkout': 'checkout'
+            'click .place': 'choose'
         },
         clearFields: function(){
+            //clearing fields of the form
+            //this mustn't be here I know, I will move it and make it easier
             $('#account').val("").closest('.form-group').removeClass('has-error').removeClass('has-success').find('.help-block').html('').addClass('hidden');
             $('#email').val("").closest('.form-group').removeClass('has-error').removeClass('has-success').find('.help-block').html('').addClass('hidden');
             $('#cvv').val("").closest('.form-group').removeClass('has-error').removeClass('has-success').find('.help-block').html('').addClass('hidden');
             $('#student').removeAttr('checked');
             $('#renter').removeAttr('checked');
             $('#buyradio').trigger('click');
-        },
-        cancel: function(){
-            console.log("cancelled");
-        },
-        checkout: function(){
-            //new step new view
-        },
-        buy: function(){
-
-        },
-        reserve: function(){
-            //add class so that it is marked chosen
         },
         choose: function(e){
             var placeClass = ($("#"+e.target.id).hasClass('cheap'))? 0:($("#"+e.target.id).hasClass('medium'))? 1:2;
@@ -273,124 +258,6 @@
             var smth = this.makeView();
             this.$el.html( smth );
             return this;
-
-            //var id = "";
-            //for(var i=0; i<this.model.reserved.length; i++)
-            //{
-            //    id="";
-            //    for(var j=0; j<2; j++)
-            //    {
-            //        id += this.model.reserved[i][j];
-            //    }
-            //    $("#"+id).addClass("reserved");
-            //}
-        }
-    });
-
-
-    App.Models.Sort = Backbone.Model.extend({
-        defaults: {
-            //array: ["Все", "Театр им. Т.Г. Шевченко", "Дом Актёра", "ХНАТОБ", "Театр им. А.С. Пушкина", "ТЮЗ", "Театр Музкомедии", "Театр кукол", "Мадригал"],
-            //arrayoftypes: ["по возрастанию цены", "по убыванию цены", "по дате", "по популярности"]
-        }
-    });
-    App.Views.SortView = Backbone.View.extend({
-        tagName: 'div',
-        className: 'sorttab',
-        initialize: function(){
-            this.render();
-        },
-        events:{
-            'click #help': 'filter',
-            'click #pisun': 'sort',
-            'click #clear': 'clear'
-        },
-        templateSort: _.template('<div class="width"><label for="gogol" class="label">Поиск:</label><input id="gogol" class="form-control input-sm" type="search" style="width: 300px" placeholder="Введите название представления..." ></div><label for="theatre" class="label">Театр:</label><select id="theatre" class="form-control input-sm" style="width: 200px; display: inline"><option value="1">Все</option><option value="2">Театр им. Т.Г. Шевченко</option><option value="3">Дом Актёра</option><option value="4">ХНАТОБ</option><option value="5">Театр им. А.С. Пушкина</option><option value="6">ТЮЗ</option><option value="7">Театр Музкомедии</option><option value="8">Театр кукол</option><option value="9">Мадригал</option></select><label for="dateSort" class="label">Дата:</label><input id="dateSort" class="form-control input-sm" type="date" style="display: inline; width: 140px" min="2015-30-09"</input><button id="help" class="btn">Найти</button><label for="sort" class="label">Сортировать:</label><select id="sort" class="input-sm form-control" style="display: inline; width: 225px"><option value="0">Укажите параметр сортировки</option><option value="1">по возрастанию цены</option><option value="2">по убыванию цены</option><option value="3">по дате</option><option value="4">по популярности</option></select><button id="pisun" class="btn">Сортировать</button><button id="clear" class="btn">Очистить</button>'),
-        clear: function(){
-            $("#gogol").val("");
-            $("select option[value=1]").attr('selected', 'true');
-            $('#dateSort').val("");
-            counter = 0;
-            $('#plot').empty();
-            playCollectionView.render();
-            $('#plot').append(playCollectionView.el);
-        },
-        filter: function() {
-            var selectedText = $("#theatre option:selected").text();
-            var val = document.getElementById('gogol').value.toUpperCase();
-            //var val = document.getElementById('gogol').value;
-            convertVal(val);
-            var dateText = convertDate(document.getElementById('dateSort').value);
-            if (val === '' && counter === 0 && selectedText === 'Все' && dateText === '')
-                return;
-            else if (val === '' && counter === 1 && selectedText === 'Все' && dateText === '' ){
-                counter = 0;
-                $('#plot').empty();
-                playCollectionView.render();
-                $('#plot').append(playCollectionView.el);
-            }
-            else
-            {
-                counter = 1;
-                var result;
-                if(val !== '')
-                {
-                    flag = false;
-                    result = collectionOfPlays.where({name: val});
-                    resultCol = new App.Collections.PlayCollection(result);
-                }
-                if(selectedText !== 'Все')
-                {
-                    if(flag === true)
-                        result = collectionOfPlays.where({theatre: selectedText});
-                    else
-                        result = resultCol.where({theatre: selectedText});
-                    flag = false;
-                    resultCol = new App.Collections.PlayCollection(result);
-                }
-                if(dateText !== '')
-                {
-                    if(flag === true)
-                        result = collectionOfPlays.where({date: dateText});
-                    else
-                        result = resultCol.where({date: dateText});
-                    resultCol = new App.Collections.PlayCollection(result);
-                }
-                flag = true;
-                $('#plot').empty();
-                resultView = new App.Views.PlayCollectionView({collection: resultCol});
-                resultView.render();
-                $('#plot').append(resultView.el);
-            }
-        },
-        sort: function() {
-            var selectedItem = $('#sort option:selected').val();
-            if(counter === 0)
-            {
-                if(selectedItem === 1)
-                    collectionOfPlays.pluck('price');
-                else if(selectedItem === 2)
-                    collectionOfPlays.pluck('price');
-                else if(selectedItem === 3)
-                    collectionOfPlays.pluck('date');
-                playCollectionView.render();
-                $('#plot').append(playCollectionView.el);
-            }
-            else
-            {
-                if(selectedItem === 1)
-                    resultCol.pluck('price');
-                else if(selectedItem === 2)
-                    resultCol.pluck('price');
-                else if(selectedItem === 3)
-                    resultCol.pluck('date');
-                resultView.render();
-                $('#plot').append(resultView.el);
-            }
-        },
-        render: function(){
-            this.$el.html(this.templateSort(this.model.toJSON()));
-            return this;
         }
     });
 
@@ -401,14 +268,10 @@
         className: 'play',
         initialize: function(){
             this.model.on('destroy', this.remove, this);
-            this.model.on('change', this.render, this); //!!!!!!!!!!! ВАЖНО и НУЖНО для обновления вида при изменении модели
+            this.model.on('change', this.render, this);
             console.log("rendering views of plays");
             this.render();
         },
-
-        /*<a onmouseover="nhpup.popup('Lorem ipsum dolor sit ...');" href='somewhere.html'>some text</a>
-        */
-        /*<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Large Modal</button>*/
         templateMin: _.template('<img src="/images/<%= picture%>"><h1><%= name %></h1><div class="right"><p><%= date %></p><p><%= time %></p><button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-primary"></div><p>Театр: <span><%= theatre %></span></p><p>Труппа: <span><%= troupe %></span></p><div class="price"><p>Цена:<span> от <%= price %>грн</span></p></div><button class="more">Подробнее</button>'),
         templateMax: _.template('<img src="/images/<%= picture%>"><h1><%= name %></h1><div class="right"><p><%= date %></p><p><%= time %></p><button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-primary"></div><p>Театр: <span><%= theatre %></span></p><p>Труппа: <span><%= troupe %></span></p><div class="price"><p>Цена:<span> от <%= price %>грн</span></p></div><button class="less">Скрыть</button><div class="add"><p>Актёры: <span><%= starring %></span></p><p>О чём: <span><%= summary %></span></p></div>'),
         events: {
@@ -438,10 +301,6 @@
             this.$(".right").css("height", "630px");
         },
         buyTicket: function(){
-            //$('#plot').empty();
-            //$('#myModal').empty();
-            //$('#myModal').append('<div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h4 class="js-title-step"></h4></div><div class="modal-body"><div data-step="2" data-title="Оформление" class="row hide"><div class="checkoutForm"><form role="form" class="form-horizontal"><div class="form-group"><label for="email" class="col-lg-2 control-label">Email</label><div class="col-lg-10"><input id="email" type="email" name="email" placeholder="Введите свой email" class="form-control"><span class="help-block hidden"></span></div></div><div class="form-group"><label for="account" class="col-lg-2 control-label">Номер счёта:</label><div class="col-lg-10"><input id="account" type="text" name="account" placeholder="введите номер счёта (16 цифр)" class="form-control"><span class="help-block hidden"></span></div></div><div class="form-group"><label for="cvv" class="col-lg-2 control-label">CVV</label><div class="col-lg-10"><input id="cvv" type="text" name="cvv" placeholder="введите последние 3 цифры cvv" class="form-control"><span class="help-block hidden"></span></div></div><div class="form-group"><div class="col-lg-offset-2 col-lg-10"><div class="checkbox"><label class="control-label"><input id="terms" type="checkbox" value="true" name="discount">Я студент</label><span class="help-block hidden"></span></div></div></div><div class="form-group"><div class="col-lg-offset-2 col-lg-10"><button id="signUpButton" type="button" class="btn btn-success">Проверить</button></div> </div></form></div></div><div data-step="3" data-title="Завершение оформления заказа" class="row hide"><div class="lastStep"><p>Билеты будут высланы Вам на указанный email адрес в течении получаса.</p><p>При желании Вы можете распечатать билеты прямо сейчас.</p><p>Спасибо за использование нашего сервиса!</p><button id="print" type="button" class="btn btn-success">Распечатать билет</button></div></div></div><div class="modal-footer"><button type="button" id="cancel" data-orientation="cancel" data-dismiss="modal" class="btn btn-default js-btn-step pull-left"></button><button type="button" id="previous" data-orientation="previous" class="btn btn-warning js-btn-step"></button><button type="button" id="next" data-orientation="next" class="btn btn-success js-btn-step"></button></div></div></div>');
-
             $('.row[data-step=1]').remove();
             var audienceView = new App.Views.AudienceView({model: this.model});
             $('.modal-body').append( audienceView.render().$el);
@@ -473,6 +332,7 @@
         url: '/play/collection.json'
     });
 
+
     App.Views.PlayCollectionView = Backbone.View.extend({
 
         tagName: 'div',
@@ -497,9 +357,6 @@
 
     });
 
-    var sort = new App.Models.Sort();
-
-    var sortView = new App.Views.SortView({model: sort});
 
     var collectionOfPlays = new App.Collections.PlayCollection();
     collectionOfPlays.fetch();
@@ -507,56 +364,20 @@
     var playCollectionView = new App.Views.PlayCollectionView({collection: collectionOfPlays});
     playCollectionView.render();
 
-    $('.sortMenu').append(sortView.el);
     $('#plot').append(playCollectionView.el);
 
 
-    //var audienceView = new App.Views.AudienceView();
-    //$('.modal-body').append( audienceView.render().$el);
 
 
-    //checkoutView.setHandlers();
+    //pop-up initialization
 
-
-    function disableNext(){
-        $("#next").attr('disabled', 'disabled');
-    }
-    function next(){
-        $("#next").removeAttr('disabled');
-    }
-    function disablePrevious(){
-        $("#previous").attr('disabled', 'disabled');
-    }
-
-
-    $('.orderType').on('click', function(e){
-        if(e.target.value == "book") {
-            disableNext();
-            $('.orderType[value=book]').attr("checked","true");
-            $("input[name=account]").attr('disabled', 'disabled');
-            $("input[name=cvv]").attr('disabled', 'disabled');
-        }
-        else {
-            disableNext();
-            $('.orderType[value=book]').removeAttr("checked");
-            $("input[name=account]").removeAttr('disabled');
-            $("input[name=cvv]").removeAttr('disabled');
-        }
-    });
-    //$('#cancel').on('click', function(){
-    //    $('.js-title-step').empty();
-    //    $('.row[data-step=1]').remove();
-    //});
     $('#myModal').modalSteps({
         btnCancelHtml: 'Отмена',
         btnPreviousHtml: 'Назад',
         btnNextHtml: 'Далее',
         btnLastStepHtml: 'Завершить',
         disableNextButton: false,
-        completeCallback: function(){
-            //$('.row .hide').remove();
-            //$('.modal-body').append( audienceView.render().$el);
-        },
+        completeCallback: function(){},
         callbacks: {
             '*': function(){
                 console.log("steps");
@@ -565,7 +386,7 @@
                 disableNext();
             },
             '2': function(){
-                disableNext();
+                //disableNext();
             },
             '3': function(){
                 disablePrevious();
@@ -573,6 +394,7 @@
         }
     });
 
+    //event handlers to enable enter button
 
     $("#myModal").keypress(function(e){
         if(e.keyCode==13){
@@ -586,6 +408,47 @@
         }
     });
 
+
+    //here it is a try to catch click on next button
+    $('#next').click(function(e){
+        //here it checks if it is the second step window
+        if($('#actual-step').attr('value')== "2"&&!formValidation){
+
+            //some unlucky tries
+
+            //$('#checkIfNext').trigger('click');
+            //$('#previous').trigger('click');
+            //console.log(collectionOfPlays.playView);
+        }
+    });
+
+
+    //it's all about disabling and enabling pop-up navigation buttons
+    function disableNext(){
+        $("#next").attr('disabled', 'disabled');
+    }
+    function next(){
+        $("#next").removeAttr('disabled');
+    }
+    function disablePrevious(){
+        $("#previous").attr('disabled', 'disabled');
+    }
+
+    //this event handler disables two fields when we turn to book mode and vice versa
+    $('.orderType').on('click', function(e){
+        if(e.target.value == "book") {
+            //disableNext();
+            $('.orderType[value=book]').attr("checked","true");
+            $("input[name=account]").attr('disabled', 'disabled');
+            $("input[name=cvv]").attr('disabled', 'disabled');
+        }
+        else {
+            //disableNext();
+            $('.orderType[value=book]').removeAttr("checked");
+            $("input[name=account]").removeAttr('disabled');
+            $("input[name=cvv]").removeAttr('disabled');
+        }
+    });
 
 
 

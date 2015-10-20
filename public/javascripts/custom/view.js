@@ -347,4 +347,3 @@
         };
         return $.each(this.serializeArray(), b), a
     };
-

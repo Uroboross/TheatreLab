@@ -15,13 +15,13 @@
         model: App.Models.Play,
         initialize: function(){
         },
-        comparator: function(a){
-            var selectedItem = $('#sort option:selected').val();
-            if(selectedItem === 0)
-                return;
-            else
-                return a.get('price');
-        },
+        //comparator: function(a){
+        //    var selectedItem = $('#sort option:selected').val();
+        //    if(selectedItem === 0)
+        //        return;
+        //    else
+        //        return a.get('price');
+        //},
         url: '/play/collection.json'
     });
 

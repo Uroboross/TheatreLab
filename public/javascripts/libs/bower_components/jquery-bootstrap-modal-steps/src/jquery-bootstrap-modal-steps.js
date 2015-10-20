@@ -13,7 +13,8 @@
             btnLastStepHtml: 'Complete',
             disableNextButton: false,
             completeCallback: function(){},
-            callbacks: {}
+            callbacks: {},
+            nextValidationCallback: function(){}
         }, options);
 
 
@@ -146,11 +147,15 @@
 
             // Check the orientation to make logical operations with actualStep/nextStep
             if (orientation === 'next'){
-                nextStep = actualStep + 1;
+                if(settings.nextValidationCallback()!=null && settings.nextValidationCallback()== true ) {
+                    nextStep = actualStep + 1;
 
-                $btnPrevious.attr('data-step', actualStep);
-                $actualStep.val(nextStep);
-
+                    $btnPrevious.attr('data-step', actualStep);
+                    $actualStep.val(nextStep);
+                }
+                else{
+                    nextStep = actualStep;
+                }
             } else if (orientation === 'previous'){
                 nextStep = actualStep - 1;
 
@@ -179,15 +184,17 @@
             }
 
             // Hide and Show steps
-            $modal
-                .find('[data-step=' + actualStep + ']')
-                .not($modal.find('.js-btn-step'))
-                .addClass('hide');
+            //if(settings.nextValidationCallback()!=null && settings.nextValidationCallback()== true) {
+                $modal
+                    .find('[data-step=' + actualStep + ']')
+                    .not($modal.find('.js-btn-step'))
+                    .addClass('hide');
 
-            $modal
-                .find('[data-step=' + nextStep + ']')
-                .not($modal.find('.js-btn-step'))
-                .removeClass('hide');
+                $modal
+                    .find('[data-step=' + nextStep + ']')
+                    .not($modal.find('.js-btn-step'))
+                    .removeClass('hide');
+            //}
 
             // Just a check for the class of previous button
             if (parseInt($btnPrevious.attr('data-step')) > 0 ){
@@ -201,7 +208,9 @@
             }
 
             // Get the next step
-            $nextStep = $modal.find('[data-step=' + nextStep + ']');
+            //if(settings.nextValidationCallback()!=null && settings.nextValidationCallback()== true) {
+                $nextStep = $modal.find('[data-step=' + nextStep + ']');
+            //}
 
             // Verify if we need to unlock continue btn of the next step
             if ($nextStep.attr('data-unlock-continue')){

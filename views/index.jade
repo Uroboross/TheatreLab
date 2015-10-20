@@ -8,76 +8,14 @@ block content
   .rightCurtain
     img(src="/images/rkurtain.jpg")
   #plot
-  //Modal
-  div(class="modal fade", id="myModal", role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" tabindex='1')
-    div(class="modal-dialog")
-      div(class="modal-content")
-        div(class="modal-header")
-          h4(class="js-title-step")
-        div(class="modal-body")
-          div(class="row hide" data-step="2" data-title="Оформление")
-            div(class="checkoutForm" id="controlDiv")
-              form.form-horizontal(role='form')
-                .form-group
-                  label.col-lg-2.control-label Выберите
-                  .col-lg-10
-                    label.radio-inline.control-label
-                      input#buyradio(type='radio', name='order', class='orderType',  value='buy' checked="true")
-                      |  Купить
-                    label.radio-inline.control-label
-                      input#bookradio(type='radio', name='order', class='orderType', value='book')
-                      |  Забронировать
-                    span.help-block.hidden
-                .form-group
-                  label.col-lg-2.control-label(for='email') Email
-                  .col-lg-10
-                    input#email.form-control(type='email', name='email', placeholder="Введите свой email" )
-                    span.help-block.hidden
-                .form-group
-                  label.col-lg-2.control-label(for='account') Номер счёта
-                  .col-lg-10
-                    input#account.form-control(type='text', name='account', placeholder="введите номер счёта (16 цифр)")
-                    span.help-block.hidden
-                .form-group
-                  label.col-lg-2.control-label(for='cvv') CVV
-                  .col-lg-10
-                    input#cvv.form-control(type='text', name='cvv', placeholder="введите последние 3 цифры cvv")
-                    span.help-block.hidden
-                .form-group
-                  .col-lg-offset-2.col-lg-10
-                    .checkbox
-                      label.control-label
-                        input#student(type='checkbox', value='true', name='discount')
-                        | Я студент
-                      span.help-block.hidden
-                    .checkbox
-                      label.control-label
-                        input#renter(type='checkbox', value='true', name='discount')
-                        | Я пенсионер
-                      span.help-block.hidden
-                .form-group
-                  .col-lg-offset-2.col-lg-10
-                    button(type='button', hidden="hidden" id="checkIfNext")
-
-          div(class="row hide" data-step="3" data-title="Завершение оформления заказа")
-            div(class="lastStep")
-              p Билеты будут высланы Вам на указанный email адрес в течении получаса.
-              p При желании Вы можете распечатать билеты прямо сейчас.
-              p Спасибо за использование нашего сервиса!
-              button#print.btn.btn-success(type='button') Распечатать билет
-        div(class="modal-footer")
-          button(type="button", class="btn btn-default js-btn-step pull-left", id="cancel", data-orientation="cancel", data-dismiss="modal")
-          button(type="button", class="btn btn-warning js-btn-step", id="previous" data-orientation="previous")
-          button(type="button", class="btn btn-success js-btn-step", id="next" data-orientation="next")
-
-  //div(class="modal-content")
-        //div(class="modal-header")
-        //  button(type="button" class="close" data-dismiss="modal") &times;
-        //  h4(class="modal-title") Modal Header
-        //div(class="modal-body")
-        //  p This is a large modal.
-        //div(class="modal-footer")
-          button(type="button" class="btn btn-default" data-dismiss="modal") Close
+  script(type="text/template" id="myModalTemplate")
+    include  ../public/javascripts/templates/myModalTemplate.js
+  script(type="text/template" id="minPlayTemplate")
+    include  ../public/javascripts/templates/minPlayTemplate.js
+  script(type="text/template" id="maxPlayTemplate")
+    include  ../public/javascripts/templates/maxPlayTemplate.js
+  script(type="text/template" id="formTemplate")
+    include  ../public/javascripts/templates/formTemplate.js
   script(src="/javascripts/libs/bower_components/underscore/underscore.js")
   script(src="/javascripts/libs/bower_components/jquery/dist/jquery.js")
   script(src="/javascripts/libs/bower_components/backbone/backbone.js")
@@ -85,7 +23,10 @@ block content
   script(src="/javascripts/libs/bower_components/jquery-bootstrap-modal-steps/src/jquery-bootstrap-modal-steps.js")
   script(src="/javascripts/libs/bower_components/backbone.validation/src/backbone-validation.js")
   script(src="/javascripts/custom/prompts.js")
-  script(src="/javascripts/custom/main.js")
+  script(src="/javascripts/custom/model.js")
+  script(src="/javascripts/custom/view.js")
+  script(src="/javascripts/custom/controller.js")
+  script(src="/javascripts/custom/sort.js")
 
 
 

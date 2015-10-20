@@ -12,7 +12,6 @@
         }
     });
 
-    //model to validate
     App.Models.Checkout = Backbone.Model.extend({
         validation: {
             email: [{
@@ -45,7 +44,6 @@
         }
     });
 
-    //some extension of validation callbacks
     _.extend(Backbone.Validation.callbacks, {
         valid: function (view, attr, selector) {
             var $el = view.$('[name=' + attr + ']'),
@@ -78,102 +76,149 @@
         return $.each(this.serializeArray(), b), a
     };
 
-
-
-    //this is the main view for the current task
     App.Views.CheckoutView = Backbone.View.extend({
+        tagName:'form',
+        className: "form-horizontal",
+        attributes:{
+            'role': "form"
+        },
+        template: _.template($('#formTemplate').html()),
+        initialize: function () {
+            this.render();
+            Backbone.Validation.bind(this);
+        },
         events: {
             'blur #email': 'emailIsValid',
             'blur #account': 'accountIsValid',
             'blur #cvv': 'cvvIsValid',
-            'click #checkIfNext': function(){
-                this.signUp();
-                //$('#next').trigger('click');
-            },
             'click .orderType[value=book]': function(){
+                $('.orderType[value=book]').attr("checked", "true");
+                $("input[name=account]").attr('disabled', 'disabled');
+                $("input[name=cvv]").attr('disabled', 'disabled');
                 $('#account').val("").closest('.form-group').removeClass('has-error').removeClass('has-success').find('.help-block').html('').addClass('hidden');
                 $('#cvv').val("").closest('.form-group').removeClass('has-error').removeClass('has-success').find('.help-block').html('').addClass('hidden');
-                this.valid[1] = true;
-                this.valid[2] = true;
-                this.signUp();
             },
             'click .orderType[value=buy]': function(){
-                this.cvvIsValid();
-                this.accountIsValid();
+                $('.orderType[value=book]').removeAttr("checked");
+                $("input[name=account]").removeAttr('disabled');
+                $("input[name=cvv]").removeAttr('disabled');
+                this.signUp();
             }
         },
-        valid: [false, false, false],
+        //refactor this in one function
         emailIsValid: function(){
-            $('#checkIfNext').trigger('click');
             var data = this.$el.serializeObject();
             this.model.set(data);
-            var isValid = this.model.isValid('email');
-            this.valid[0] = (isValid)?true:false;
-            console.log(this.valid);
-            this.signUp();
+            this.model.isValid('email');
         },
         accountIsValid: function(){
             var data = this.$el.serializeObject();
             this.model.set(data);
-            var isValid = this.model.isValid('account');
-            this.valid[1] = (isValid)?true:false;
-            console.log(this.valid);
-            this.signUp();
+            this.model.isValid('account');
         },
         cvvIsValid: function(){
             var data = this.$el.serializeObject();
             this.model.set(data);
-            var isValid = this.model.isValid('cvv');
-            this.valid[2] = (isValid)?true:false;
-            console.log(this.valid);
-            this.signUp();
-        },
-        initialize: function () {
-            // This hooks up the validation
-            // See: http://thedersen.com/projects/backbone-validation/#using-form-model-validation/validation-binding
-            Backbone.Validation.bind(this);
+            this.model.isValid('cvv');
         },
 
         signUp: function () {
-            if(this.valid[0]&&this.valid[1]&&this.valid[2])
-                formValidation = true;
+            var data = this.$el.serializeObject();
+            this.model.set(data);
+            if($('.orderType[value=book]').attr("checked") == "checked")
+                return this.model.isValid('email');
+            else
+                return this.model.isValid(true);
         },
 
         remove: function() {
-            // Remove the validation binding
-            // See: http://thedersen.com/projects/backbone-validation/#using-form-model-validation/unbinding
             Backbone.Validation.unbind(this);
             return Backbone.View.prototype.remove.apply(this, arguments);
         },
 
         render: function(){
+            this.$el.html( this.template( {} ) );
+            $('.checkoutForm').append(this.el);
         }
     });
 
+    App.Views.PopUpView = Backbone.View.extend({
+        tagName: 'div',
+        className: 'modal fade',
+        id: 'myModal',
+        flag: false,
+        attributes: {
+            'role': 'dialog',
+            'aria-labelledby': 'myModalLabel',
+            'aria-hidden': 'true',
+            'tabindex': '1'
+        },
+        template: _.template($('#myModalTemplate').html()),
+        initialize: function(){
+            $('#myModal').remove();
+            this.render();
+            this.checkoutModel = new App.Models.Checkout();
+            this.checkoutView = new App.Views.CheckoutView({model: this.checkoutModel});
+        },
+        events: {
+            'keydown .modal-dialog': function(e){
+                if (e.keyCode == 13) {
+                    $("#next").trigger('click');
+                }
+            },
+            'click #next': function(){
+                if($('#actual-step').attr('value') == "2"){
+                    if(this.flag)
+                        this.checkoutView.signUp();
+                    else
+                        this.flag = true;
+                }
+            }
+        },
+        render: function(){
+            this.$el.html( this.template( {} ) );
+            $('#plot').append(this.el);
+            this.initializeModal();
+
+        },
+        initializeModal: function(){
+            var thisRef = this;
+            this.$el.modalSteps({
+                btnCancelHtml: 'Отмена',
+                btnPreviousHtml: 'Назад',
+                btnNextHtml: 'Далее',
+                btnLastStepHtml: 'Завершить',
+                disableNextButton: false,
+                completeCallback: function () {
+                },
+                callbacks: {
+                    '1': function () {
+                        disableNext();
+                    },
+                    '3': function () {
+                        disablePrevious();
+                    }
+                },
+                nextValidationCallback: function () {
+                    return !($('#actual-step').attr('value') == "2" && !thisRef.checkoutView.signUp());
+                }
+            });
+        }
+    });
 
     App.Views.AudienceView = Backbone.View.extend({
         tagName:'div',
         className: "row hide",
+        attributes: {
+            'data-step': "1",
+            'data-title': "Выбор мест"
+        },
         arrOfPlaces: [],
         initialize: function() {
-            this.$el.attr('data-step', "1");
-            this.$el.attr('data-title', "Выбор мест");
-            console.log("AV created");
-            this.clearFields();
             this.arrOfPlaces = [];
         },
         events: {
             'click .place': 'choose'
-        },
-        clearFields: function(){
-            //clearing fields of the form
-            //this mustn't be here I know, I will move it and make it easier
-            $('#account').val("").closest('.form-group').removeClass('has-error').removeClass('has-success').find('.help-block').html('').addClass('hidden');
-            $('#email').val("").closest('.form-group').removeClass('has-error').removeClass('has-success').find('.help-block').html('').addClass('hidden');
-            $('#cvv').val("").closest('.form-group').removeClass('has-error').removeClass('has-success').find('.help-block').html('').addClass('hidden');
-            $('#student').removeAttr('checked');
-            $('#renter').removeAttr('checked');
-            $('#buyradio').trigger('click');
         },
         choose: function(e){
             var placeClass = ($("#"+e.target.id).hasClass('cheap'))? 0:($("#"+e.target.id).hasClass('medium'))? 1:2;
@@ -269,11 +314,10 @@
         initialize: function(){
             this.model.on('destroy', this.remove, this);
             this.model.on('change', this.render, this);
-            console.log("rendering views of plays");
             this.render();
         },
-        templateMin: _.template('<img src="/images/<%= picture%>"><h1><%= name %></h1><div class="right"><p><%= date %></p><p><%= time %></p><button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-primary"></div><p>Театр: <span><%= theatre %></span></p><p>Труппа: <span><%= troupe %></span></p><div class="price"><p>Цена:<span> от <%= price %>грн</span></p></div><button class="more">Подробнее</button>'),
-        templateMax: _.template('<img src="/images/<%= picture%>"><h1><%= name %></h1><div class="right"><p><%= date %></p><p><%= time %></p><button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-primary"></div><p>Театр: <span><%= theatre %></span></p><p>Труппа: <span><%= troupe %></span></p><div class="price"><p>Цена:<span> от <%= price %>грн</span></p></div><button class="less">Скрыть</button><div class="add"><p>Актёры: <span><%= starring %></span></p><p>О чём: <span><%= summary %></span></p></div>'),
+        templateMin: _.template($('#minPlayTemplate').html()),
+        templateMax: _.template($('#maxPlayTemplate').html()),
         events: {
             'click .more': 'fullInformation',
             'click .less': 'briefInformation',
@@ -301,12 +345,9 @@
             this.$(".right").css("height", "630px");
         },
         buyTicket: function(){
-            $('.row[data-step=1]').remove();
+            var popUpView = new App.Views.PopUpView();
             var audienceView = new App.Views.AudienceView({model: this.model});
             $('.modal-body').append( audienceView.render().$el);
-            var checkoutModel = new App.Models.Checkout();
-            var checkoutView = new App.Views.CheckoutView({el: 'form', model: checkoutModel});
-
         },
         render: function(){
             this.$el.html( this.templateMin( this.model.toJSON() ) );
@@ -320,7 +361,6 @@
     App.Collections.PlayCollection = Backbone.Collection.extend({
         model: App.Models.Play,
         initialize: function(){
-            console.log("collection initialized");
         },
         comparator: function(a){
             var selectedItem = $('#sort option:selected').val();
@@ -338,12 +378,11 @@
         tagName: 'div',
 
         initialize: function() {
-
             console.log("rendering collection view");
             this.collection.on('add', this.addOne, this);
-            //this.collection.on('change', this.sortThisBitch, this);
+            //this.render();
+            //$('#plot').append(this.el);
             console.log(this.el);
-
         },
         addOne: function(play) {
             var playView = new App.Views.PlayView({ model: play });
@@ -358,104 +397,31 @@
     });
 
 
+
     var collectionOfPlays = new App.Collections.PlayCollection();
     collectionOfPlays.fetch();
-
     var playCollectionView = new App.Views.PlayCollectionView({collection: collectionOfPlays});
     playCollectionView.render();
-
     $('#plot').append(playCollectionView.el);
 
-
-
-
-    //pop-up initialization
-
-    $('#myModal').modalSteps({
-        btnCancelHtml: 'Отмена',
-        btnPreviousHtml: 'Назад',
-        btnNextHtml: 'Далее',
-        btnLastStepHtml: 'Завершить',
-        disableNextButton: false,
-        completeCallback: function(){},
-        callbacks: {
-            '*': function(){
-                console.log("steps");
-            },
-            '1': function(){
-                disableNext();
-            },
-            '2': function(){
-                //disableNext();
-            },
-            '3': function(){
-                disablePrevious();
-            }
-        }
-    });
-
-    //event handlers to enable enter button
-
-    $("#myModal").keypress(function(e){
-        if(e.keyCode==13){
-            $("#next").trigger('click');
-        }
-    });
-
-    $("#gogol").keypress(function(e){
-        if(e.keyCode==13){
+    $("#gogol").keypress(function (e) {
+        if (e.keyCode == 13) {
             $("#help").trigger('click');
         }
     });
 
-
-    //here it is a try to catch click on next button
-    $('#next').click(function(e){
-        //here it checks if it is the second step window
-        if($('#actual-step').attr('value')== "2"&&!formValidation){
-
-            //some unlucky tries
-
-            //$('#checkIfNext').trigger('click');
-            //$('#previous').trigger('click');
-            //console.log(collectionOfPlays.playView);
-        }
-    });
-
-
-    //it's all about disabling and enabling pop-up navigation buttons
-    function disableNext(){
+    function disableNext() {
         $("#next").attr('disabled', 'disabled');
     }
-    function next(){
+
+    function next() {
         $("#next").removeAttr('disabled');
     }
-    function disablePrevious(){
+
+    function disablePrevious() {
         $("#previous").attr('disabled', 'disabled');
     }
 
-    //this event handler disables two fields when we turn to book mode and vice versa
-    $('.orderType').on('click', function(e){
-        if(e.target.value == "book") {
-            //disableNext();
-            $('.orderType[value=book]').attr("checked","true");
-            $("input[name=account]").attr('disabled', 'disabled');
-            $("input[name=cvv]").attr('disabled', 'disabled');
-        }
-        else {
-            //disableNext();
-            $('.orderType[value=book]').removeAttr("checked");
-            $("input[name=account]").removeAttr('disabled');
-            $("input[name=cvv]").removeAttr('disabled');
-        }
-    });
-
-
-
-    //хэлпер шаблона
-    //window.template = function(id) {
-    //    return _.template( $('#' + id).html() );
-    //};
 
 
 

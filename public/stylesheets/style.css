@@ -2,10 +2,6 @@
   font-family: 'Astemper Bold';
   src: url("/fonts/astamper_bold.ttf");
 }
-/*@font-face {*/
-  /*font-family: "Due Date";*/
-  /*src: url("/fonts/DueDate.ttf");*/
-/*}*/
 
 body {
   background-color: black;
@@ -240,6 +236,10 @@ span{
 
 
 /*----------------------------pop-up----------------------------------*/
+#myModal{
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
 .popUpContent{
   margin: 0 15px 0 15px;
   width: 588px;
@@ -379,8 +379,8 @@ span{
 /*-----------------------checkout--------------------------------*/
 
 .checkoutForm{
-  /*margin-left: 150px;*/
-  width: 550px;
+  margin-left: 15px;
+  width: 580px;
 }
 
 .lastStep{

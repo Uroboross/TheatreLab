@@ -4,8 +4,6 @@ var resultCol;
 var resultView;
 
 
-var formValidation = false;
-
 function convertDate(date) {
     if(date.length === 0)
         return '';
@@ -46,7 +44,12 @@ App.Views.SortView = Backbone.View.extend({
     events:{
         'click #help': 'filter',
         'click #pisun': 'sort',
-        'click #clear': 'clear'
+        'click #clear': 'clear',
+        'keypress #gogol': function(e){
+            if (e.keyCode == 13) {
+                $("#help").trigger('click');
+            }
+        }
     },
     templateSort: _.template('<div class="width"><label for="gogol" class="label">Поиск:</label><input id="gogol" class="form-control input-sm" type="search" style="width: 300px" placeholder="Введите название представления..." ></div><label for="theatre" class="label">Театр:</label><select id="theatre" class="form-control input-sm" style="width: 200px; display: inline"><option value="1">Все</option><option value="2">Театр им. Т.Г. Шевченко</option><option value="3">Дом Актёра</option><option value="4">ХНАТОБ</option><option value="5">Театр им. А.С. Пушкина</option><option value="6">ТЮЗ</option><option value="7">Театр Музкомедии</option><option value="8">Театр кукол</option><option value="9">Мадригал</option></select><label for="dateSort" class="label">Дата:</label><input id="dateSort" class="form-control input-sm" type="date" style="display: inline; width: 140px" min="2015-30-09"</input><button id="help" class="btn">Найти</button><label for="sort" class="label">Сортировать:</label><select id="sort" class="input-sm form-control" style="display: inline; width: 225px"><option value="0">Укажите параметр сортировки</option><option value="1">по возрастанию цены</option><option value="2">по убыванию цены</option><option value="3">по дате</option><option value="4">по популярности</option></select><button id="pisun" class="btn">Сортировать</button><button id="clear" class="btn">Очистить</button>'),
     clear: function(){

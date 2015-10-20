@@ -339,7 +339,7 @@
     <property name="FullScreen" value="false" />
     <property name="restartRequiresConfirmation" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Confirmation" />
+    <property name="settings.editor.selected.configurable" value="settings.github" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
   </component>
   <component name="RecentsManager">
@@ -637,7 +637,7 @@
       <workItem from="1444151708708" duration="5680000" />
       <workItem from="1444241825012" duration="771000" />
       <workItem from="1444764454868" duration="18469000" />
-      <workItem from="1445071814089" duration="19746000" />
+      <workItem from="1445071814089" duration="20088000" />
     </task>
     <task id="LOCAL-00001" summary="some merge">
       <created>1443964298869</created>
@@ -705,11 +705,17 @@
       <option name="project" value="LOCAL" />
       <updated>1445117017295</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="changed validation&#10;refactoring main.js&#10;divided it in several files">
+      <created>1445336889580</created>
+      <option name="number" value="00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1445336889580</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="190816000" />
+    <option name="totallyTimeSpent" value="191158000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
@@ -788,7 +794,8 @@
     <MESSAGE value="some corrections in visual display" />
     <MESSAGE value="added different price categories" />
     <MESSAGE value="refactoring" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactoring" />
+    <MESSAGE value="changed validation&#10;refactoring main.js&#10;divided it in several files" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed validation&#10;refactoring main.js&#10;divided it in several files" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />

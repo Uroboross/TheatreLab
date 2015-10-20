@@ -55,29 +55,25 @@ App.Views.SortView = Backbone.View.extend({
         else
         {
             this.counter = 1;
-            var result;
             if(val !== '')
             {
                 this.flag = false;
-                result = collectionOfPlays.where({name: val});
-                this.resultCol = new App.Collections.PlayCollection(result);
+                this.resultCol = new App.Collections.PlayCollection(collectionOfPlays.where({name: val}));
             }
             if(selectedText !== 'Все')
             {
                 if(this.flag === true)
-                    result = collectionOfPlays.where({theatre: selectedText});
+                    this.resultCol = new App.Collections.PlayCollection(collectionOfPlays.where({theatre: selectedText}));
                 else
-                    result = this.resultCol.where({theatre: selectedText});
+                    this.resultCol = new App.Collections.PlayCollection(this.resultCol.where({theatre: selectedText}));
                 this.flag = false;
-                this.resultCol = new App.Collections.PlayCollection(result);
             }
             if(dateText !== '')
             {
                 if(this.flag === true)
-                    result = collectionOfPlays.where({date: dateText});
+                    this.resultCol = new App.Collections.PlayCollection(collectionOfPlays.where({date: dateText}));
                 else
-                    result = this.resultCol.where({date: dateText});
-                this.resultCol = new App.Collections.PlayCollection(result);
+                    this.resultCol = new App.Collections.PlayCollection(this.resultCol.where({date: dateText}));
             }
             this.flag = true;
             $('#plot').empty();

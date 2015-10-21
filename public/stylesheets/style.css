@@ -30,17 +30,23 @@ img{
   border-right: groove 1px #144854;
 }
 
-.bmenu {
+.upper {
+  text-align: center;
   position: fixed;
-  height: 48px;
+  height: 98px;
   width: 100%;
-  background-image: url("/images/up.png");
+  background-image: url("/images/upper.png");
 }
 
+#logo{
+  margin-top: 4px;
+  height: 90px;
+  margin-left: calc(50% - 78px);
+}
 
 .leftCurtain {
   background-color: #000000;
-  margin-top: 48px;
+  margin-top: 98px;
   position: fixed;
   width: 10%;
   height: 200vh;
@@ -54,7 +60,7 @@ img{
 
 .rightCurtain {
   background-color: #000000;
-  margin-top: 48px;
+  margin-top: 98px;
   position: fixed;
   margin-left: 90%;
   width: 10%;
@@ -69,7 +75,7 @@ img{
 /*-----------------------------����������-----------------------------------*/
 .sortMenu {
   position: fixed;
-  margin-top: 48px;
+  margin-top: 98px;
   margin-left: 10%;
   width: 80%;
   background-color: #000000;
@@ -86,7 +92,7 @@ label {
 /*----------------------�������������-----------------------------*/
 #plot {
   font-family: "Astemper Bold", serif;
-  margin-top: 118px;
+  margin-top: 168px;
   margin-left: 10%;
   background-color: #000000;
   width: 80%;

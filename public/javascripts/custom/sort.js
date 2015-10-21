@@ -45,7 +45,6 @@ App.Views.SortView = Backbone.View.extend({
         var selectedText = $("#theatre option:selected").text();
         var val = document.getElementById('gogol').value.toUpperCase();
         var dateText = this.convertDate(document.getElementById('dateSort').value);
-        //if (val === '' && this.counter === 0 && selectedText === 'Все' && dateText === ''){}
         if (val === '' && this.counter === 1 && selectedText === 'Все' && dateText === '' ){
             this.counter = 0;
             $('#plot').empty();
@@ -80,6 +79,10 @@ App.Views.SortView = Backbone.View.extend({
             this.resultView = new App.Views.PlayCollectionView({collection: this.resultCol});
             this.resultView.render();
             $('#plot').append(this.resultView.el);
+        }
+        if(this.resultCol.length === 0) {
+            $('#plot').append('<img src="/images/OSCAR.jpg" height="20%" width="95%">');
+            $('#plot').append('<h3 style="color: red" align="center">Поиск не дал результатов :)</br>Попробуйте еще раз</h3>');
         }
     },
     sort: function() {
